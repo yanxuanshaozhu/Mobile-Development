@@ -18,7 +18,3 @@ This repo is used to hold my homework for the class CS153A Mobile Development. I
 ALl work in this repo is done solely by the owner of this repo. No other individuals should take advantage of work in this repo in any means.
 
 
-
-=======
-This repo is used to hold my homework for the class CS153A Mobile Development
->>>>>>> a038dce6104a69a1791d611fad278e30ec510af2
