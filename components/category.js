@@ -5,7 +5,7 @@ const CategoryScreen = ({ navigation }) => {
     return (
         <View style={styles.containerCategory} >
             <View style={{ flex: 1, alignItems: "center" }}>
-                <Text style={{ fontSize: 30, color: "black" }}>
+                <Text style={{ fontSize: 20, color: "black" }}>
                     Choose one category to do conversion
                 </Text>
             </View>
@@ -31,12 +31,22 @@ const CategoryScreen = ({ navigation }) => {
                         <Text style={styles.categoryText}> Length</Text>
                     </TouchableOpacity>
                 </View>
+                <View style={styles.buttonView}>
+                    <TouchableOpacity
+                        style={styles.categorySpeed}
+                        onPress={
+                            () => navigation.navigate("Speed")
+                        }
+                    >
+                        <Text style={styles.categoryText}> Speed</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.rowCategory}>
                 <View style={styles.buttonView}>
                     <TouchableOpacity
-                        style={styles.categorySpeed}
+                        style={styles.categoryVolume}
                         onPress={
                             () => navigation.navigate("Volume")
                         }
@@ -53,6 +63,16 @@ const CategoryScreen = ({ navigation }) => {
                         }
                     >
                         <Text style={styles.categoryText}> Weight</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.buttonView}>
+                    <TouchableOpacity
+                        style={styles.categoryCurrency}
+                        onPress={
+                            () => navigation.navigate("Currency")
+                        }
+                    >
+                        <Text style={styles.categoryText}> Currency</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -87,29 +107,43 @@ const styles = StyleSheet.create({
     },
     categoryArea: {
         backgroundColor: "red",
-        height: 200,
-        width: 200,
+        height: "55%",
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },
     categoryLength: {
         backgroundColor: "yellow",
-        height: 200,
-        width: 200,
+        height: "55%",
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },
     categorySpeed: {
-        backgroundColor: "pink",
-        height: 200,
-        width: 200,
+        backgroundColor: "orange",
+        height: "55%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    categoryVolume: {
+        backgroundColor: "purple",
+        height: "55%",
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },
     categoryWeight: {
         backgroundColor: "blue",
-        height: 200,
-        width: 200,
+        height: "55%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    categoryCurrency: {
+        backgroundColor: "lightblue",
+        height: "55%",
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     }

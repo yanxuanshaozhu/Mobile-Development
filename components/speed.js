@@ -3,16 +3,15 @@ import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LengthScreen = () => {
+const SpeedScreen = () => {
     const [userInfo, setUserInfo] = useState({});
     const [num, setNum] = useState(0);
-    const [itemValue1, setItemValue1] = useState("km")
-    const [itemValue2, setItemValue2] = useState("km")
+    const [itemValue1, setItemValue1] = useState("km/h");
+    const [itemValue2, setItemValue2] = useState("km/h");
 
-
-    const lengthMapping = { "km": 1, "m": 1000, "mile": 0.621371, "yard": 1093.612959995625, "ft": 3280.838879986874872, "in": 39370.066559842496645 }
+    const speedMapping = { "km/h": 1, "m/s": 0.2777777778, "mph": 0.6213711922, "ft/min": 54.68066492, "c(v)": 0.00000000149116, "Mach(a)": 0.0008093758094, "Mach(w)": 0.000187181791 };
     const init = 0;
-    const output = num * lengthMapping[itemValue2] / lengthMapping[itemValue1];
+    const output = num * speedMapping[itemValue2] / speedMapping[itemValue1];
 
     useEffect(() => { getData() }
         , [])
@@ -43,15 +42,15 @@ const LengthScreen = () => {
         }
     }
 
-    let saveView = <View></View>;
+    let saveView = <View></View>
     if (userInfo.registered) {
         saveView = <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
 
             <Button
                 title="Save data"
                 onPress={() => {
-                    const length = { i1: num, i2: itemValue1, i3: itemValue2, i4: output }
-                    userInfo.length = length;
+                    const speed = { i1: num, i2: itemValue1, i3: itemValue2, i4: output }
+                    userInfo.speed = speed;
                     storeData(userInfo);
                 }}
             />
@@ -59,9 +58,9 @@ const LengthScreen = () => {
     }
 
     return (
-        <View style={styles.containerLength}>
+        <View style={styles.containerSpeed}>
             <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={styles.containerLengthLeft}>
+                <View style={styles.containerSpeedLeft}>
                     <TextInput
                         style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
                         onChangeText={(num) => setNum(parseFloat(num))}
@@ -75,21 +74,22 @@ const LengthScreen = () => {
                         }
                         style={{ flex: 2 }}
                         itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilometer Meter" value="km" />
-                        <Picker.Item label="Meter" value="m" />
-                        <Picker.Item label="Mile" value="mile" />
-                        <Picker.Item label="Yard" value="yard" />
-                        <Picker.Item label="Feet" value="ft" />
-                        <Picker.Item label="Inch" value="in" />
+                        <Picker.Item label="Kilometer per Hour" value="km/h" />
+                        <Picker.Item label="Meter per Second" value="m/s" />
+                        <Picker.Item label="Mile per Hour" value="mph" />
+                        <Picker.Item label="Feet per Minute" value="ft/min" />
+                        <Picker.Item label="Speed of Light" value="c(v)" />
+                        <Picker.Item label="Speed of Sound(air)" value="Mach(a)" />
+                        <Picker.Item label="Speed of Sound(water)" value="Mach(w)" />
                     </Picker>
                 </View>
-                <View style={styles.containerLengthMiddle}>
+                <View style={styles.containerSpeedMiddle}>
                     <Text>
                         =
                     </Text>
                 </View>
-                <View style={styles.containerLengthRight}>
-                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
+                <View style={styles.containerSpeedRight}>
+                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(10)} </Text>
                     <Picker
                         selectedValue={itemValue2}
                         onValueChange={(itemValue2, itemIndex) =>
@@ -97,40 +97,41 @@ const LengthScreen = () => {
                         }
                         style={{ flex: 2 }}
                         itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilometer Meter" value="km" />
-                        <Picker.Item label="Meter" value="m" />
-                        <Picker.Item label="Mile" value="mile" />
-                        <Picker.Item label="Yard" value="yard" />
-                        <Picker.Item label="Feet" value="ft" />
-                        <Picker.Item label="Inch" value="in" />
+                        <Picker.Item label="Kilometer per Hour" value="km/h" />
+                        <Picker.Item label="Meter per Second" value="m/s" />
+                        <Picker.Item label="Mile per Hour" value="mph" />
+                        <Picker.Item label="Feet per Minute" value="ft/min" />
+                        <Picker.Item label="Speed of Light" value="c(v)" />
+                        <Picker.Item label="Speed of Sound(air)" value="Mach(a)" />
+                        <Picker.Item label="Speed of Sound(water)" value="Mach(w)" />
                     </Picker>
-
                 </View>
+
+
             </View>
             {saveView}
         </View>
     );
 };
 
-
 const styles = StyleSheet.create({
-    containerLength: {
+    containerSpeed: {
         flex: 1,
         backgroundColor: "grey",
     },
-    containerLengthLeft: {
+    containerSpeedLeft: {
         flex: 4,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"
     },
-    containerLengthMiddle: {
+    containerSpeedMiddle: {
         flex: 1,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"
     },
-    containerLengthRight: {
+    containerSpeedRight: {
         flex: 4,
         flexDirection: "row",
         alignItems: "center",
@@ -139,4 +140,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LengthScreen;
+export default SpeedScreen;

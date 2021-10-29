@@ -43,7 +43,7 @@ const WeightScreen = () => {
         }
     }
 
-    let saveView = ""
+    let saveView = <View></View>;
     if (userInfo.registered) {
         saveView = <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
 
@@ -63,7 +63,7 @@ const WeightScreen = () => {
             <View style={{ flex: 1, flexDirection: "row" }}>
                 <View style={styles.containerWeightLeft}>
                     <TextInput
-                        style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center" }}
+                        style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
                         onChangeText={(num) => setNum(parseFloat(num))}
                         value={num}
                         keyboardType="numeric">
@@ -73,7 +73,8 @@ const WeightScreen = () => {
                         onValueChange={(itemValue1, itemIndex) =>
                             setItemValue1(itemValue1)
                         }
-                        style={{ flex: 1 }}>
+                        style={{ flex: 2 }}
+                        itemStyle={{ fontSize: 10 }}>
                         <Picker.Item label="Kilogram" value="kg" />
                         <Picker.Item label="Gram" value="gr" />
                         <Picker.Item label="Pound" value="lb" />
@@ -87,13 +88,14 @@ const WeightScreen = () => {
                     </Text>
                 </View>
                 <View style={styles.containerWeightRight}>
-                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5" }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
+                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5" ,fontSize:10}}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
                     <Picker
                         selectedValue={itemValue2}
                         onValueChange={(itemValue2, itemIndex) =>
                             setItemValue2(itemValue2)
                         }
-                        style={{ flex: 1 }}>
+                        style={{ flex: 2 }}
+                        itemStyle={{fontSize:10}}>
                         <Picker.Item label="Kilogram" value="kg" />
                         <Picker.Item label="Gram" value="gr" />
                         <Picker.Item label="Pound" value="lb" />

@@ -10,8 +10,10 @@ import AboutScreen from './components/about';
 
 import AreaScreen from "./components/area";
 import LengthScreen from "./components/length";
+import SpeedScreen from './components/speed';
 import VolumeScreen from "./components/volume";
 import WeightScreen from "./components/weight";
+import CurrencyScreen from './components/currency';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,8 +27,10 @@ const App = () => {
                 <Stack.Screen name="Category" component={CategoryScreen} />
                 <Stack.Screen name="Area" component={AreaScreen} />
                 <Stack.Screen name="Volume" component={VolumeScreen} />
+                <Stack.Screen name="Speed" component={SpeedScreen} />
                 <Stack.Screen name="Length" component={LengthScreen} />
                 <Stack.Screen name="Weight" component={WeightScreen} />
+                <Stack.Screen name="Currency" component={CurrencyScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

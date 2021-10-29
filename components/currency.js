@@ -3,18 +3,20 @@ import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LengthScreen = () => {
+const CurrencyScreen = () => {
     const [userInfo, setUserInfo] = useState({});
     const [num, setNum] = useState(0);
-    const [itemValue1, setItemValue1] = useState("km")
-    const [itemValue2, setItemValue2] = useState("km")
+    const [itemValue1, setItemValue1] = useState("USD");
+    const [itemValue2, setItemValue2] = useState("USD");
+    const [data, setData] = useState({});
 
-
-    const lengthMapping = { "km": 1, "m": 1000, "mile": 0.621371, "yard": 1093.612959995625, "ft": 3280.838879986874872, "in": 39370.066559842496645 }
     const init = 0;
-    const output = num * lengthMapping[itemValue2] / lengthMapping[itemValue1];
+    const output = num * data[itemValue2] / data[itemValue1];
 
-    useEffect(() => { getData() }
+    useEffect(() => {
+        getData();
+        getRates();
+    }
         , [])
 
     const getData = async () => {
@@ -43,15 +45,37 @@ const LengthScreen = () => {
         }
     }
 
-    let saveView = <View></View>;
+    const getRates = async () => {
+        try {
+            const response = await fetch('https://openexchangerates.org/api/latest.json?app_id=3fde0830b3a24434957729d6ffae3f4b');
+            const json = await response.json();
+            setData(json.rates);
+            let userInfo = null
+            if (jsonValue != null) {
+                userInfo = JSON.parse(jsonValue);
+                setUserInfo(userInfo);
+
+            }
+        } catch (e) {
+            console.log("ERROR IN READING DATA");
+        }
+    }
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+
+
+    let saveView = <View></View>
     if (userInfo.registered) {
         saveView = <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
 
             <Button
                 title="Save data"
                 onPress={() => {
-                    const length = { i1: num, i2: itemValue1, i3: itemValue2, i4: output }
-                    userInfo.length = length;
+                    const currency = { i1: num, i2: itemValue1, i3: itemValue2, i4: output }
+                    userInfo.currency = currency;
                     storeData(userInfo);
                 }}
             />
@@ -59,9 +83,9 @@ const LengthScreen = () => {
     }
 
     return (
-        <View style={styles.containerLength}>
+        <View style={styles.containerCurrency}>
             <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={styles.containerLengthLeft}>
+                <View style={styles.containerCurrencyLeft}>
                     <TextInput
                         style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
                         onChangeText={(num) => setNum(parseFloat(num))}
@@ -75,20 +99,21 @@ const LengthScreen = () => {
                         }
                         style={{ flex: 2 }}
                         itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilometer Meter" value="km" />
-                        <Picker.Item label="Meter" value="m" />
-                        <Picker.Item label="Mile" value="mile" />
-                        <Picker.Item label="Yard" value="yard" />
-                        <Picker.Item label="Feet" value="ft" />
-                        <Picker.Item label="Inch" value="in" />
+                        <Picker.Item label="United States Dollar" value="USD" />
+                        <Picker.Item label="Chinese Yuan" value="CNY" />
+                        <Picker.Item label="Great Britain Pound" value="GBP" />
+                        <Picker.Item label="Euro" value="EUR" />
+                        <Picker.Item label="Canadian Dollar" value="CAD" />
+                        <Picker.Item label="Hong Kong Dollar" value="HKD" />
+                        <Picker.Item label="Indian Rupee" value="INR" />
                     </Picker>
                 </View>
-                <View style={styles.containerLengthMiddle}>
+                <View style={styles.containerCurrencyMiddle}>
                     <Text>
                         =
                     </Text>
                 </View>
-                <View style={styles.containerLengthRight}>
+                <View style={styles.containerCurrencyRight}>
                     <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
                     <Picker
                         selectedValue={itemValue2}
@@ -97,40 +122,42 @@ const LengthScreen = () => {
                         }
                         style={{ flex: 2 }}
                         itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilometer Meter" value="km" />
-                        <Picker.Item label="Meter" value="m" />
-                        <Picker.Item label="Mile" value="mile" />
-                        <Picker.Item label="Yard" value="yard" />
-                        <Picker.Item label="Feet" value="ft" />
-                        <Picker.Item label="Inch" value="in" />
+                        <Picker.Item label="United States Dollar" value="USD" />
+                        <Picker.Item label="Chinese Yuan" value="CNY" />
+                        <Picker.Item label="Great Britain Pound" value="GBP" />
+                        <Picker.Item label="Euro" value="EUR" />
+                        <Picker.Item label="Canadian Dollar" value="CAD" />
+                        <Picker.Item label="Hong Kong Dollar" value="HKD" />
+                        <Picker.Item label="Indian Rupee" value="INR" />
                     </Picker>
-
                 </View>
+
+
             </View>
             {saveView}
         </View>
+
     );
 };
 
-
 const styles = StyleSheet.create({
-    containerLength: {
+    containerCurrency: {
         flex: 1,
         backgroundColor: "grey",
     },
-    containerLengthLeft: {
+    containerCurrencyLeft: {
         flex: 4,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"
     },
-    containerLengthMiddle: {
+    containerCurrencyMiddle: {
         flex: 1,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"
     },
-    containerLengthRight: {
+    containerCurrencyRight: {
         flex: 4,
         flexDirection: "row",
         alignItems: "center",
@@ -138,5 +165,4 @@ const styles = StyleSheet.create({
         backgroundColor: "grey",
     }
 });
-
-export default LengthScreen;
+export default CurrencyScreen;

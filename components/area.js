@@ -42,14 +42,14 @@ const AreaScreen = () => {
         }
     }
 
-    let saveView = ""
+    let saveView = <View></View>
     if (userInfo.registered) {
         saveView = <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
 
             <Button
                 title="Save data"
                 onPress={() => {
-                    const area = { i1: num, i2: itemValue1, i3: itemValue2, i4: output}
+                    const area = { i1: num, i2: itemValue1, i3: itemValue2, i4: output }
                     userInfo.area = area;
                     storeData(userInfo);
                 }}
@@ -62,7 +62,7 @@ const AreaScreen = () => {
             <View style={{ flex: 1, flexDirection: "row" }}>
                 <View style={styles.containerAreaLeft}>
                     <TextInput
-                        style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center" }}
+                        style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
                         onChangeText={(num) => setNum(parseFloat(num))}
                         value={num}
                         keyboardType="numeric">
@@ -72,7 +72,8 @@ const AreaScreen = () => {
                         onValueChange={(itemValue1, itemIndex) =>
                             setItemValue1(itemValue1)
                         }
-                        style={{ flex: 1 }}>
+                        style={{ flex: 2 }}
+                        itemStyle={{ fontSize: 10 }}>
                         <Picker.Item label="Are" value="are" />
                         <Picker.Item label="Square Kilometer" value="km2" />
                         <Picker.Item label="Square Meter" value="m2" />
@@ -88,13 +89,14 @@ const AreaScreen = () => {
                     </Text>
                 </View>
                 <View style={styles.containerAreaRight}>
-                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5" }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
+                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
                     <Picker
                         selectedValue={itemValue2}
                         onValueChange={(itemValue2, itemIndex) =>
                             setItemValue2(itemValue2)
                         }
-                        style={{ flex: 1 }}>
+                        style={{ flex: 2 }}
+                        itemStyle={{ fontSize: 10 }}>
                         <Picker.Item label="Are" value="are" />
                         <Picker.Item label="Square Kilometer" value="km2" />
                         <Picker.Item label="Square Meter" value="m2" />

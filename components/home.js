@@ -9,7 +9,7 @@ const HomeScreen = ({ navigation }) => {
                 style={styles.backgroundImage} />
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 42 }}> Welcome to this unit converter </Text>
+                    <Text style={{ fontWeight: "bold", fontSize: 35 }}> Unit Converter </Text>
                 </View>
                 <View style={{ flex: 1, flexDirection: "row" }}>
                     <View style={{ flex: 1, alignItems: "center" }}>
@@ -27,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ flex: 1, alignItems: "center" }}>
                         <Button title="Register to view history"
                             onPress={
-                                () => navigation.navigate('Register', {version: "CPA 2.0"})}
+                                () => navigation.navigate('Register', {version: "CPA 3.0"})}
                         />
                     </View>
 
@@ -40,8 +40,8 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
-        width: "40%",
-        height: "40%",
+        width: "100%",
+        height: "100%",
     },
     containerHome: {
         flex: 1,
