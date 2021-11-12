@@ -46,20 +46,26 @@ This app is a unit converter that helps users convert between different units(re
 </div>
 
 ## Developer Notes
+
 <figure>
-    <figcaption style="font-weight:bold">Used Tools:</figcaption>
+    <figcaption style="font-weight:bold">Current Project Structure</figcaption>
+    <img src="./assets/Project%20Structure.png" style="width:100%">
+</figure>
+
+<figure>
+    <figcaption style="font-weight:bold">Used Tools</figcaption>
     <ul>
         <li>React Native</li>
         <li>JavaScript</li>
         <li>Picker</li>
         <li>AsyncStorage</li>
-        <li>Context</li>
-        <li>Container Components</li>
+        <li>Context Component</li>
+        <li>Container Component</li>
     </ul>
 </figure>
 
 <figure>
-    <figcaption style="font-weight:bold">To be done:</figcaption>
+    <figcaption style="font-weight:bold">To be done</figcaption>
 </figure>
 - [ ] Add database connection: mongo DB or MySQL
 - [ ] Make the user profile page more user friendly
