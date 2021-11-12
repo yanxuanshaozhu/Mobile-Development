@@ -1,16 +1,16 @@
 import React from 'react';
 import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
-
+import AboutText from './abouttext';
+import ValueProvider from './ValueContext';
 
 
 const AboutScreen = ({ navigation }) => {
+    const data = { text: "As an international student who came to the United States for the first time, I find it quite confusing with units that I'd never used in my home country. So I made this unit converter to help me do conversions." }
     return (
         <View style={styles.container}>
-            <View style={{ flex: 1, justifyContent: "center" }}>
-                <Text style={{ fontSize: 20 }}>
-                    As an international student who came to the United States for the first time, I find it quite confusing with units that I'd never used in my home country. So I made this unit converter to help me do conversions.
-                </Text>
-            </View>
+            <ValueProvider value={data}>
+                <AboutText />
+            </ValueProvider>
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 2, justifyContent: "center" }}>
                     <Text style={{ fontSize: 20, color: "#fcba03" }}>

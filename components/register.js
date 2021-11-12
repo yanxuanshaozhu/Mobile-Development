@@ -46,7 +46,7 @@ const RegisterScreen = ({ navigation, route }) => {
         } catch (e) {
             console.log("ERROR IN STORING DATA");
         }
-    }
+    }   
 
     let areaView = <View></View>;
     if (userInfo.registered && userInfo.area != null) {

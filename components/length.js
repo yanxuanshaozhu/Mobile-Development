@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScreenTemplate from './screencontainer';
 
 const LengthScreen = () => {
     const [userInfo, setUserInfo] = useState({});
@@ -58,55 +59,53 @@ const LengthScreen = () => {
         </View>
     }
 
+    const left = <View style={styles.containerLengthLeft}>
+        <TextInput
+            style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
+            onChangeText={(num) => setNum(parseFloat(num))}
+            value={num}
+            keyboardType="numeric">
+        </TextInput>
+        <Picker
+            selectedValue={itemValue1}
+            onValueChange={(itemValue1, itemIndex) =>
+                setItemValue1(itemValue1)
+            }
+            style={{ flex: 2 }}
+            itemStyle={{ fontSize: 10 }}>
+            <Picker.Item label="Kilometer Meter" value="km" />
+            <Picker.Item label="Meter" value="m" />
+            <Picker.Item label="Mile" value="mile" />
+            <Picker.Item label="Yard" value="yard" />
+            <Picker.Item label="Feet" value="ft" />
+            <Picker.Item label="Inch" value="in" />
+        </Picker>
+    </View>
+
+    const right = <View style={styles.containerLengthRight}>
+        <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
+        <Picker
+            selectedValue={itemValue2}
+            onValueChange={(itemValue2, itemIndex) =>
+                setItemValue2(itemValue2)
+            }
+            style={{ flex: 2 }}
+            itemStyle={{ fontSize: 10 }}>
+            <Picker.Item label="Kilometer Meter" value="km" />
+            <Picker.Item label="Meter" value="m" />
+            <Picker.Item label="Mile" value="mile" />
+            <Picker.Item label="Yard" value="yard" />
+            <Picker.Item label="Feet" value="ft" />
+            <Picker.Item label="Inch" value="in" />
+        </Picker>
+
+    </View>
     return (
         <View style={styles.containerLength}>
-            <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={styles.containerLengthLeft}>
-                    <TextInput
-                        style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
-                        onChangeText={(num) => setNum(parseFloat(num))}
-                        value={num}
-                        keyboardType="numeric">
-                    </TextInput>
-                    <Picker
-                        selectedValue={itemValue1}
-                        onValueChange={(itemValue1, itemIndex) =>
-                            setItemValue1(itemValue1)
-                        }
-                        style={{ flex: 2 }}
-                        itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilometer Meter" value="km" />
-                        <Picker.Item label="Meter" value="m" />
-                        <Picker.Item label="Mile" value="mile" />
-                        <Picker.Item label="Yard" value="yard" />
-                        <Picker.Item label="Feet" value="ft" />
-                        <Picker.Item label="Inch" value="in" />
-                    </Picker>
-                </View>
-                <View style={styles.containerLengthMiddle}>
-                    <Text>
-                        =
-                    </Text>
-                </View>
-                <View style={styles.containerLengthRight}>
-                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
-                    <Picker
-                        selectedValue={itemValue2}
-                        onValueChange={(itemValue2, itemIndex) =>
-                            setItemValue2(itemValue2)
-                        }
-                        style={{ flex: 2 }}
-                        itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilometer Meter" value="km" />
-                        <Picker.Item label="Meter" value="m" />
-                        <Picker.Item label="Mile" value="mile" />
-                        <Picker.Item label="Yard" value="yard" />
-                        <Picker.Item label="Feet" value="ft" />
-                        <Picker.Item label="Inch" value="in" />
-                    </Picker>
-
-                </View>
-            </View>
+            <ScreenTemplate
+                left={left}
+                right={right}
+            />
             {saveView}
         </View>
     );
@@ -120,12 +119,6 @@ const styles = StyleSheet.create({
     },
     containerLengthLeft: {
         flex: 4,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    containerLengthMiddle: {
-        flex: 1,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"

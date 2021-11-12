@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScreenTemplate from './screencontainer';
 
 const WeightScreen = () => {
     const [userInfo, setUserInfo] = useState({});
@@ -58,52 +59,52 @@ const WeightScreen = () => {
         </View>
     }
 
+    const left = <View style={styles.containerWeightLeft}>
+        <TextInput
+            style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
+            onChangeText={(num) => setNum(parseFloat(num))}
+            value={num}
+            keyboardType="numeric">
+        </TextInput>
+        <Picker
+            selectedValue={itemValue1}
+            onValueChange={(itemValue1, itemIndex) =>
+                setItemValue1(itemValue1)
+            }
+            style={{ flex: 2 }}
+            itemStyle={{ fontSize: 10 }}>
+            <Picker.Item label="Kilogram" value="kg" />
+            <Picker.Item label="Gram" value="gr" />
+            <Picker.Item label="Pound" value="lb" />
+            <Picker.Item label="Ounce" value="oz" />
+            <Picker.Item label="Grain" value="grain" />
+        </Picker>
+    </View>
+
+    const right = <View style={styles.containerWeightRight}>
+        <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5", fontSize: 10 }}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
+        <Picker
+            selectedValue={itemValue2}
+            onValueChange={(itemValue2, itemIndex) =>
+                setItemValue2(itemValue2)
+            }
+            style={{ flex: 2 }}
+            itemStyle={{ fontSize: 10 }}>
+            <Picker.Item label="Kilogram" value="kg" />
+            <Picker.Item label="Gram" value="gr" />
+            <Picker.Item label="Pound" value="lb" />
+            <Picker.Item label="Ounce" value="oz" />
+            <Picker.Item label="Grain" value="grain" />
+        </Picker>
+    </View>
+
+
     return (
         <View style={styles.containerWeight}>
-            <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={styles.containerWeightLeft}>
-                    <TextInput
-                        style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
-                        onChangeText={(num) => setNum(parseFloat(num))}
-                        value={num}
-                        keyboardType="numeric">
-                    </TextInput>
-                    <Picker
-                        selectedValue={itemValue1}
-                        onValueChange={(itemValue1, itemIndex) =>
-                            setItemValue1(itemValue1)
-                        }
-                        style={{ flex: 2 }}
-                        itemStyle={{ fontSize: 10 }}>
-                        <Picker.Item label="Kilogram" value="kg" />
-                        <Picker.Item label="Gram" value="gr" />
-                        <Picker.Item label="Pound" value="lb" />
-                        <Picker.Item label="Ounce" value="oz" />
-                        <Picker.Item label="Grain" value="grain" />
-                    </Picker>
-                </View>
-                <View style={styles.containerWeightMiddle}>
-                    <Text>
-                        =
-                    </Text>
-                </View>
-                <View style={styles.containerWeightRight}>
-                    <Text style={{ flex: 1, textAlign: "center", backgroundColor: "#4287f5" ,fontSize:10}}> {num === 0 ? init.toFixed(2) : output.toFixed(6)} </Text>
-                    <Picker
-                        selectedValue={itemValue2}
-                        onValueChange={(itemValue2, itemIndex) =>
-                            setItemValue2(itemValue2)
-                        }
-                        style={{ flex: 2 }}
-                        itemStyle={{fontSize:10}}>
-                        <Picker.Item label="Kilogram" value="kg" />
-                        <Picker.Item label="Gram" value="gr" />
-                        <Picker.Item label="Pound" value="lb" />
-                        <Picker.Item label="Ounce" value="oz" />
-                        <Picker.Item label="Grain" value="grain" />
-                    </Picker>
-                </View>
-            </View>
+            <ScreenTemplate
+                left={left}
+                right={right}
+            />
             {saveView}
         </View>
     );
@@ -116,12 +117,6 @@ const styles = StyleSheet.create({
     },
     containerWeightLeft: {
         flex: 4,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    containerWeightMiddle: {
-        flex: 1,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"

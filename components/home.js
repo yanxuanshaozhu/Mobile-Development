@@ -27,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ flex: 1, alignItems: "center" }}>
                         <Button title="Register to view history"
                             onPress={
-                                () => navigation.navigate('Register', {version: "CPA 3.0"})}
+                                () => navigation.navigate('Register', {version: "CPA 4.0"})}
                         />
                     </View>
 
