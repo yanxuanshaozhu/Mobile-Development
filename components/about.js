@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
-import AboutText from './abouttext';
+import AboutText from './aboutText';
 import ValueProvider from './ValueContext';
 
 

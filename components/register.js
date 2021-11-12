@@ -138,7 +138,7 @@ const RegisterScreen = ({ navigation, route }) => {
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
                 <Text style={{ fontSize: 15 }}>Enter Your Email </Text>
                 <TextInput
-                    placeholder="Enter your name"
+                    placeholder="Enter your email"
                     onChangeText={(email) => { setEmail(email) }}
                     value={email}
                     style={{ fontSize: 15 }}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ScreenTemplate from "./screencontainer.js";
+import ScreenTemplate from "./screenContainer";
 
 const VolumeScreen = () => {
     const [userInfo, setUserInfo] = useState({});

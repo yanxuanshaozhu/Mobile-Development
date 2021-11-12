@@ -67,6 +67,8 @@ This app is a unit converter that helps users convert between different units(re
 <figure>
     <figcaption style="font-weight:bold">To be done</figcaption>
 </figure>
+
+
 - [ ] Add database connection: mongo DB or MySQL
 - [ ] Make the user profile page more user friendly
 - [ ] Deploy this app to Heroku
