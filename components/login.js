@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useValue } from "./ValueContext";
 import Axios from "axios";
 
 
-const RegisterScreen = ({ navigation, route }) => {
+const LoginScreen = ({ navigation, route }) => {
 
     const { currentValue, setCurrentValue } = useValue()
-    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [result, setResult] = useState();
+    const [result, setResult] = useState({ "status": "" });
 
     let emailError = <View> </View>
     const validateEmail = (value) => {
@@ -25,24 +25,6 @@ const RegisterScreen = ({ navigation, route }) => {
         } else if (value === "") {
             emailError = <View>
                 <Text style={{ color: "red" }}>Email is required </Text>
-            </View>
-        }
-    }
-
-    let nameError = <View></View>
-    const validateName = (value) => {
-        if (value !== "") {
-            let c = value[0].toLowerCase();
-            let cond = "a" <= c && c <= "z"
-            if (!cond) {
-                nameError =
-                    <View>
-                        <Text style={{ color: "red" }}>Username can only start with a character </Text>
-                    </View>
-            }
-        } else if (value === "") {
-            nameError = <View>
-                <Text style={{ color: "red" }}>UserName is required </Text>
             </View>
         }
     }
@@ -65,35 +47,47 @@ const RegisterScreen = ({ navigation, route }) => {
         }
     }
 
+
     let resultView = <View></View>
-    if (result === true) {
+    if (result["status"] === true) {
         resultView = <View>
-            <Text style={{ color: "red" }}> Registration is successful! Please Login</Text>
+            <Text style={{ color: "red" }}> Login successful!</Text>
             <Button
-                title="Login In"
-                onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
+                title="profile"
+                onPress={() => navigation.navigate('Profile')}
+            />
+            <Button
+                title="start conversion"
+                onPress={() => navigation.navigate("Category")}
             />
         </View>
-    } else if (result === false) {
+    } else if (result["status"] === false) {
         resultView = <View>
-            <Text style={{ color: "red" }}>Registration failed, this email has ready linked to one account, please go to login</Text>
+            <Text style={{ color: "red" }}>Login failed, account does not exist, please register first</Text>
             <Button
-                title="Login In"
-                onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
+                title="Register"
+                onPress={() => navigation.navigate('Register', { version: "CPA 5.0" })}
             />
         </View>
     }
-    const userRegistration = async () => {
+
+    const userLogin = async () => {
         try {
             let serverURL = currentValue.serverURL;
 
             const registerStatus = await Axios({
                 method: "post",
-                url: "/register",
+                url: "/getUserInfo",
                 baseURL: serverURL,
-                data: { userEmail: email, userName: name },
+                data: { userEmail: email },
             });
-            setResult(registerStatus.data["status"]);
+            let data = registerStatus.data;
+            console.log(data);
+            setResult(data);
+            if (data["status"] === true) {
+                await AsyncStorage.setItem("@userData",
+                    JSON.stringify({ "userEmail": data.userEmail, "registered": true }))
+            }
         } catch (error) {
             console.log(error);
         }
@@ -106,7 +100,7 @@ const RegisterScreen = ({ navigation, route }) => {
             </View>
 
             <View>
-                <Text style={{ fontSize: 20, textAlign: "center" }}>Register an account here</Text>
+                <Text style={{ fontSize: 20, textAlign: "center" }}>Login your account here</Text>
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -123,19 +117,6 @@ const RegisterScreen = ({ navigation, route }) => {
             {emailError}
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                <Text style={{ fontSize: 15 }}>Enter Your Name </Text>
-                <TextInput
-                    placeholder="Enter your name"
-                    onChangeText={(name) => { setName(name) }}
-                    value={name}
-                    style={{ fontSize: 15 }}
-                    onEndEditing={validateName(name)}
-                />
-            </View>
-
-            {nameError}
-
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
                 <Text style={{ fontSize: 15 }}>Enter Your Password </Text>
                 <TextInput
                     placeholder="Enter your password"
@@ -149,11 +130,10 @@ const RegisterScreen = ({ navigation, route }) => {
 
             {pwdError}
             {resultView}
-
             <Button
-                title="Register"
+                title="Login"
                 onPress={() => {
-                    userRegistration();
+                    userLogin();
                 }}
             />
         </View>
@@ -169,4 +149,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RegisterScreen;
+export default LoginScreen;

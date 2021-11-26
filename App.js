@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from './components/home';
 import RegisterScreen from './components/register';
+import LoginScreen from './components/login';
 import CategoryScreen from './components/category';
 import AboutScreen from './components/about';
 
@@ -14,25 +15,35 @@ import SpeedScreen from './components/speed';
 import VolumeScreen from "./components/volume";
 import WeightScreen from "./components/weight";
 import CurrencyScreen from './components/currency';
-
+import ValueProvider from './components/ValueContext';
+import { configureData } from './components/configure';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+    const currencyURL = "https://openexchangerates.org/api/latest.json?app_id=3fde0830b3a24434957729d6ffae3f4b";
+
+    const serverURL = "https://cpa-server.herokuapp.com/";
+
+
+
     return (
-        <NavigationContainer >
-            <Stack.Navigator initialRouteName="Home" >
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Register" component={RegisterScreen} />
-                <Stack.Screen name="About" component={AboutScreen} />
-                <Stack.Screen name="Category" component={CategoryScreen} />
-                <Stack.Screen name="Area" component={AreaScreen} />
-                <Stack.Screen name="Volume" component={VolumeScreen} />
-                <Stack.Screen name="Speed" component={SpeedScreen} />
-                <Stack.Screen name="Length" component={LengthScreen} />
-                <Stack.Screen name="Weight" component={WeightScreen} />
-                <Stack.Screen name="Currency" component={CurrencyScreen} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <ValueProvider value={{ "serverURL": serverURL, "currencyURL": currencyURL }}>
+            <NavigationContainer >
+                <Stack.Navigator initialRouteName="Home" >
+                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen name="Register" component={RegisterScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="About" component={AboutScreen} />
+                    <Stack.Screen name="Category" component={CategoryScreen} />
+                    <Stack.Screen name="Area" component={AreaScreen} />
+                    <Stack.Screen name="Volume" component={VolumeScreen} />
+                    <Stack.Screen name="Speed" component={SpeedScreen} />
+                    <Stack.Screen name="Length" component={LengthScreen} />
+                    <Stack.Screen name="Weight" component={WeightScreen} />
+                    <Stack.Screen name="Currency" component={CurrencyScreen} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </ValueProvider>
     );
 };
 

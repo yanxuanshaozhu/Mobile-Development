@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
                 <View style={{ flex: 1, flexDirection: "row" }}>
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="Go to App Description"
+                        <Button title="App Description"
                             onPress={
                                 () => navigation.navigate('About')}
                         />
@@ -25,9 +25,14 @@ const HomeScreen = ({ navigation }) => {
                         />
                     </View>
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="Register to view history"
-                            onPress={
-                                () => navigation.navigate('Register', {version: "CPA 4.0"})}
+                        <Button title="Register"
+                            onPress={() => navigation.navigate('Register', { version: "CPA 5.0" })}
+                        />
+                    </View>
+
+                    <View style={{ flex: 1, alignItems: "center" }}>
+                        <Button title="Login"
+                            onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
                         />
                     </View>
 

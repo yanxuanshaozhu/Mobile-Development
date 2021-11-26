@@ -3,8 +3,11 @@ import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
+import { useValue } from './ValueContext';
+import Axios from "axios";
 
 const SpeedScreen = () => {
+    const { currentValue, setCurrentValue } = useValue();
     const [userInfo, setUserInfo] = useState({});
     const [num, setNum] = useState(0);
     const [itemValue1, setItemValue1] = useState("km/h");
@@ -19,16 +22,12 @@ const SpeedScreen = () => {
 
     const getData = async () => {
         try {
-
-            const jsonValue = await AsyncStorage.getItem('@User_info');
-            let userInfo = null
+            const jsonValue = await AsyncStorage.getItem("@userData");
             if (jsonValue != null) {
-                userInfo = JSON.parse(jsonValue);
-                setUserInfo(userInfo);
-
+                let info = JSON.parse(jsonValue);
+                setUserInfo(info);
             }
         } catch (e) {
-            console.log("ERROR IN READING DATA");
             console.dir(e);
         }
     }
@@ -36,8 +35,13 @@ const SpeedScreen = () => {
 
     const storeData = async (value) => {
         try {
-            const jsonValue = JSON.stringify(value);
-            await AsyncStorage.setItem('@User_info', jsonValue);
+            let serverURL = currentValue.serverURL;
+            const response = await Axios({
+                method: "post",
+                url: "/setUserActivity",
+                baseURL: serverURL,
+                data: { userEmail: userInfo["userEmail"], speed: value },
+            });
         } catch (e) {
             console.log("ERROR IN STORING DATA");
         }
@@ -50,9 +54,8 @@ const SpeedScreen = () => {
             <Button
                 title="Save data"
                 onPress={() => {
-                    const speed = { i1: num, i2: itemValue1, i3: itemValue2, i4: output }
-                    userInfo.speed = speed;
-                    storeData(userInfo);
+                    let speed = `${num} ${itemValue1} ${itemValue2} ${output}`
+                    storeData(speed);
                 }}
             />
         </View>
