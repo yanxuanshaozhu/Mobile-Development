@@ -35,6 +35,11 @@ const HomeScreen = ({ navigation }) => {
                             onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
                         />
                     </View>
+                    <View style={{ flex: 1, alignItems: "center" }}>
+                        <Button title="Profile"
+                            onPress={() => navigation.navigate('Profile', { version: "CPA 5.0" })}
+                        />
+                    </View>
 
                 </View>
             </View>

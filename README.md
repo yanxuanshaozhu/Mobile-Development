@@ -59,8 +59,8 @@ This app is a unit converter that helps users convert between different units(re
         <li>JavaScript</li>
         <li>Picker</li>
         <li>AsyncStorage</li>
-        <li>Context Component</li>
-        <li>Container Component</li>
+        <li>Axios</li>
+        <li>Express</li>
     </ul>
 </figure>
 
@@ -68,10 +68,6 @@ This app is a unit converter that helps users convert between different units(re
     <figcaption style="font-weight:bold">To be done</figcaption>
 </figure>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c8ef22e75ee657faadedb9833f6c873bed3578eb
-- [ ] Add database connection: mongo DB or MySQL
+- [X] Add database connection: mongoDB
 - [ ] Make the user profile page more user friendly
-- [ ] Deploy this app to Heroku
+- [X] Make an Express server and deploy it to heroku, server link: https://cpa-server.herokuapp.com/, server code: https://github.com/yanxuanshaozhu/CPAServer

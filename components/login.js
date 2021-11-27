@@ -86,7 +86,9 @@ const LoginScreen = ({ navigation, route }) => {
             setResult(data);
             if (data["status"] === true) {
                 await AsyncStorage.setItem("@userData",
-                    JSON.stringify({ "userEmail": data.userEmail, "registered": true }))
+                    JSON.stringify({
+                        "userEmail": data.userEmail, "userName": data.userName, "registered": true, "registeredAt": data.registeredAt
+                    }))
             }
         } catch (error) {
             console.log(error);
