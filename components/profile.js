@@ -47,8 +47,6 @@ const ProfileScreen = () => {
                 baseURL: baseURL,
                 data: { "userEmail": email },
             }).then((response) => {
-                console.log(response)
-                console.log(response.data);
                 setUserActivity(response.data);
             })
         } catch (error) {
@@ -111,7 +109,7 @@ const ProfileScreen = () => {
 
     let historyView = <View></View>
     if (display) {
-        <View style={styles.historyView}>
+        historyView = <View style={styles.historyView}>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <Text> Area conversion history:</Text>
@@ -185,71 +183,19 @@ const ProfileScreen = () => {
                         setDisplay(!display);
                     }}
                 />
+                {historyView}
             </View>
-            <View style={styles.historyView}>
 
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text> Area conversion history:</Text>
-                    <FlatList
-                        horizontal={true}
-                        data={userActivity["area"]}
-                        renderItem={renderArea}
-                    />
-                </View>
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text> Length conversion history:</Text>
-                    <FlatList
-                        horizontal={true}
-                        data={userActivity["length"]}
-                        renderItem={renderLength}
-                    />
-                </View>
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text> Speed conversion history:</Text>
-                    <FlatList
-                        horizontal={true}
-                        data={userActivity["speed"]}
-                        renderItem={renderSpeed}
-                    />
-                </View>
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text> Volume conversion history:</Text>
-                    <FlatList
-                        horizontal={true}
-                        data={userActivity["volume"]}
-                        renderItem={renderVolume}
-                    />
-                </View>
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text> Weight conversion history:</Text>
-                    <FlatList
-                        horizontal={true}
-                        data={userActivity["weight"]}
-                        renderItem={renderWeight}
-                    />
-                </View>
-
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text> Currency conversion history:</Text>
-                    <FlatList
-                        horizontal={true}
-                        data={userActivity["currency"]}
-                        renderItem={renderCurrency}
-                    />
-                </View>
-            </View>
         </View>)
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
+        flexDirection: 'column',
         alignItems: "center",
+        justifyContent: "flex-start",
+        backgroundColor: "grey",
     },
     profileInfo: {
         flex: 1,

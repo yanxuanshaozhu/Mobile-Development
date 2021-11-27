@@ -81,7 +81,7 @@ const CurrencyScreen = () => {
     const left = <View style={styles.containerCurrencyLeft}>
         <TextInput
             style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
-            onChangeText={(num) => setNum(parseFloat(num))}
+            onChangeText={(num) => setNum(num)}
             value={num}
             keyboardType="numeric">
         </TextInput>
