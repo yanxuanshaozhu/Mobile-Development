@@ -12,10 +12,27 @@ const RegisterScreen = ({ navigation, route }) => {
     const [password, setPassword] = useState("");
     const [result, setResult] = useState(0);
 
+    
+    const checkEmail = (input) => {
+        let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        return re.test(input);
+    }
+
+    const checkName = (input) => {
+        let c = input[0].toLowerCase();
+        return "a" <= c && c <= "z";
+
+    }
+    const checkPassword = (input) => {
+        let re1 = /[a-zA-Z]+/;
+        let re2 = /[0-9]+/;
+        let re3 = /[!@#$%^&*]+/;
+        return re1.test(input) && re2.test(input) && re3.test(input);
+    }
+
     const validateEmail = (value) => {
         if (value !== "") {
-            let re = /@+/
-            let cond = re.test(value)
+            let cond = checkEmail(value);
             if (!cond) {
                 return (<View>
                     <Text style={{ color: "red" }}>Invalid email address</Text>
@@ -32,8 +49,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
     const validateName = (value) => {
         if (value !== "") {
-            let c = value[0].toLowerCase();
-            let cond = "a" <= c && c <= "z"
+            let cond = checkName(value);
             if (!cond) {
                 return (<View>
                     <Text style={{ color: "red" }}>Username can only start with a character </Text>
@@ -50,10 +66,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
     const validatePassword = (value) => {
         if (value !== "") {
-            let re1 = /[a-zA-Z]+/
-            let re2 = /[0-9]+/
-            let re3 = /[!@#$%^&*]+/
-            let cond = re1.test(value) && re2.test(value) && re3.test(value)
+            let cond = checkPassword(value);
             if (!cond) {
                 return (<View>
                     <Text style={{ color: "red" }}>Password should contain at least one character, one number and one special character</Text>
@@ -69,8 +82,13 @@ const RegisterScreen = ({ navigation, route }) => {
     }
 
     const displayResult = (value) => {
+        if (value === -1) {
+            return (<View>
+                <Text style={{ color: "red" }}>Please enter valid email, username, password and try again!</Text>
+            </View>)
+        }
         if (value === 0) {
-            return (<View></View>)
+            return;
         } else if (value === 1) {
             return (<View style={{ alignItems: "center" }}>
                 <Text style={{ color: "red" }}> Registration is successful! Please Login</Text>
@@ -92,22 +110,27 @@ const RegisterScreen = ({ navigation, route }) => {
 
     const userRegistration = async () => {
         try {
-            let serverURL = currentValue.serverURL;
+            if (checkEmail(email) && checkName(name) && checkPassword(password)) {
+                let serverURL = currentValue.serverURL;
 
-            const registerStatus = await Axios({
-                method: "post",
-                url: "/register",
-                baseURL: serverURL,
-                data: { userEmail: email, userName: name, userPassword: password },
-            });
-            if (registerStatus.data["status"] === true) {
-                setResult(1)
+                const registerStatus = await Axios({
+                    method: "post",
+                    url: "/register",
+                    baseURL: serverURL,
+                    data: { userEmail: email, userName: name, userPassword: password },
+                });
+                if (registerStatus.data["status"] === true) {
+                    setResult(1)
+                } else {
+                    setResult(2)
+                }
             } else {
-                setResult(2)
+                setResult(-1);
             }
         } catch (error) {
             console.log(error);
         }
+
     }
 
     return (

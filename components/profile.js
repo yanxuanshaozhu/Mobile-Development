@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from "axios";
 import { useValue } from './ValueContext';
-import { FlatList } from 'react-native-gesture-handler';
 
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation, route }) => {
     const { currentValue, setCurrentValue } = useValue()
     const [userInfo, setUserInfo] = useState({ userEmail: "", userName: "", registeredAt: "" });
     const [userActivity, setUserActivity] = useState({});
-    const [display, setDisplay] = useState(false);
+    const [displayActivity, setDisplayActivity] = useState(false);
+    const [displayEmail, setDisplayEmail] = useState(false);
+    const [displayName, setDisplayName] = useState(false);
+    const [displayPwd, setDisplayPwd] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [resultEmail, setResultEmail] = useState(1);
+    const [resultName, setResultName] = useState(1);
+    const [resultPwd, setResultPwd] = useState(1);
 
     const areaName = { "are": "Are", "km2": "Square Kilometer", "m2": "Square Meter", "dm2": "Square Decimeter", "cm2": "Square Centimeter", "mm2": "Square MilliMeter", "acre": "Acre" };
     const lengthName = { "km": "Kilometer Meter", "m": "Meter", "mile": "Mile", "yard": "Yard", "ft": "Feet", "in": "Inch" };
@@ -49,6 +57,108 @@ const ProfileScreen = () => {
             }).then((response) => {
                 setUserActivity(response.data);
             })
+        } catch (error) {
+            console.dir(error);
+        }
+    }
+
+    const updateEmail = async () => {
+        try {
+            console.log("updateEmail start")
+            const updateData = { userEmail: userInfo.userEmail };
+            if (email != "") {
+                updateData["newEmail"] = email;
+            }
+            let serverURL = currentValue.serverURL;
+            const response = await Axios({
+                method: "post",
+                url: "/updateUserInfo",
+                baseURL: serverURL,
+                data: updateData
+            });
+            console.log("update email response")
+            console.log(response.data["status"]);
+            if (response.data["status"] === 0) {
+                let date = userInfo["registeredAt"];
+                let newName = name === "" ? userInfo["userName"] : name;
+                let newEmail = email === "" ? userInfo["userEmail"] : email;
+                let newData = {
+                    "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+                }
+                await AsyncStorage.setItem("@userData",
+                    JSON.stringify(newData));
+                setUserInfo(newData);
+            }
+            setResultEmail(response.data["status"]);
+            console.log("update email end")
+        } catch (error) {
+            console.dir(error);
+        }
+    }
+
+    const updateUserName = async () => {
+        try {
+            console.log("updateName start")
+            const updateData = { userEmail: userInfo.userEmail };
+            if (name != "") {
+                updateData["userName"] = name;
+            }
+            let serverURL = currentValue.serverURL;
+            const response = await Axios({
+                method: "post",
+                url: "/updateUserInfo",
+                baseURL: serverURL,
+                data: updateData
+            });
+            console.log("update name response")
+            console.log(response.data["status"]);
+            if (response.data["status"] === 0) {
+                let date = userInfo["registeredAt"];
+                let newName = name === "" ? userInfo["userName"] : name;
+                let newEmail = email === "" ? userInfo["userEmail"] : email;
+                let newData = {
+                    "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+                }
+                await AsyncStorage.setItem("@userData",
+                    JSON.stringify(newData));
+                setUserInfo(newData);
+            }
+            setResultName(response.data["status"]);
+            console.log("update email end")
+        } catch (error) {
+            console.dir(error);
+        }
+    }
+
+    const updatePassword = async () => {
+        try {
+            console.log("update password  start")
+            const updateData = { userEmail: userInfo.userEmail };
+            if (password != "") {
+                updateData["userPassword"] = password;
+            }
+            let serverURL = currentValue.serverURL;
+            const response = await Axios({
+                method: "post",
+                url: "/updateUserInfo",
+                baseURL: serverURL,
+                data: updateData
+            });
+            console.log("update password response")
+            console.log(response.data["status"]);
+            if (response.data["status"] === 0) {
+                let date = userInfo["registeredAt"];
+                let newName = name === "" ? userInfo["userName"] : name;
+                let newEmail = email === "" ? userInfo["userEmail"] : email;
+                let newData = {
+                    "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+                }
+                await AsyncStorage.setItem("@userData",
+                    JSON.stringify(newData));
+                setUserInfo(newData);
+            }
+            setResultPwd(response.data["status"]);
+            console.log("update password end")
         } catch (error) {
             console.dir(error);
         }
@@ -105,14 +215,82 @@ const ProfileScreen = () => {
         );
     }
 
+    let resultEmailView = <View></View>
+    if (resultEmail === 0) {
+        resultEmailView = <View><Text>Update succeeded!</Text></View>
+    } else if (resultEmail === -2) {
+        resultEmailView = <View><Text>Update failed: current email does not link to any existing account!</Text></View>
+    } else if (resultEmail === -1) {
+        resultEmailView = <View><Text>Update failed: target email has already been linked to another account, please try again!</Text></View>
+    }
 
+    let resultNameView = <View></View>
+    if (resultName === 0) {
+        resultNameView = <View><Text>Update succeeded!</Text></View>
+    }
+
+    let resultPwdView = <View></View>
+    if (resultPwd === 0) {
+        resultPwdView = <View><Text>Update succeeded!</Text></View>
+    }
+
+    let emailView = <View></View>
+    if (displayEmail) {
+        emailView = <View>
+            <Text >Enter new Email </Text>
+            <TextInput
+                placeholder="Enter your email"
+                onChangeText={(email) => { setEmail(email) }}
+                value={email}
+            />
+            <Text
+                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+                onPress={() => updateEmail()}
+            >Submit Update</Text>
+            {resultEmailView}
+        </View>
+    }
+
+    let nameView = <View></View>
+    if (displayName) {
+        nameView = <View>
+            <Text >Enter new username </Text>
+            <TextInput
+                placeholder="Enter your username"
+                onChangeText={(name) => { setName(name) }}
+                value={name}
+            />
+            <Text
+                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+                onPress={() => updateUserName()}
+            >Submit Update</Text>
+            {resultNameView}
+        </View>
+    }
+
+    let pwdView = <View></View>
+    if (displayPwd) {
+        pwdView = <View>
+            <Text >Enter new password </Text>
+            <TextInput
+                placeholder="Enter your email"
+                onChangeText={(password) => { setPassword(password) }}
+                value={password}
+                secureTextEntry={true}
+            />
+            <Text
+                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+                onPress={() => updatePassword()}
+            >Submit Update</Text>
+            {resultPwdView}
+        </View>
+    }
 
     let historyView = <View></View>
-    if (display) {
+    if (displayActivity) {
         historyView = <View style={styles.historyView}>
-
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text> Area conversion history:</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <Text style={{ fontWeight: "bold" }}> Area conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["area"]}
@@ -121,7 +299,7 @@ const ProfileScreen = () => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text> Length conversion history:</Text>
+                <Text style={{ fontWeight: "bold" }}> Length conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["length"]}
@@ -130,7 +308,7 @@ const ProfileScreen = () => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text> Speed conversion history:</Text>
+                <Text style={{ fontWeight: "bold" }}> Speed conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["speed"]}
@@ -139,7 +317,7 @@ const ProfileScreen = () => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text> Volume conversion history:</Text>
+                <Text style={{ fontWeight: "bold" }}> Volume conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["volume"]}
@@ -148,7 +326,7 @@ const ProfileScreen = () => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text> Weight conversion history:</Text>
+                <Text style={{ fontWeight: "bold" }}> Weight conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["weight"]}
@@ -157,7 +335,7 @@ const ProfileScreen = () => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text> Currency conversion history:</Text>
+                <Text style={{ fontWeight: "bold" }}> Currency conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["currency"]}
@@ -171,16 +349,53 @@ const ProfileScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.profileInfo}>
-                <Text>UserEmail: {userInfo.userEmail}</Text>
-                <Text>UserName: {userInfo.userName}</Text>
-                <Text>Registration Date: {userInfo.registeredAt.substr(0, userInfo.registeredAt.search("T"))}</Text>
+                <View style={{ flex: 1, justifyContent: "flex-start" }}>
+                    <Text style={{ fontSize: 20, textAlign: "center" }}>Unit Converter version <Text style={{ color: "red" }}>{route.params.version}</Text></Text>
+                </View>
+                <View style={{ flex: 5 }}>
+                    <View style={{ alignItems: "center" }}>
+                        <Text style={{ fontWeight: "bold", fontSize: 20 }}> User Information </Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>UserEmail  <Text style={{ fontWeight: "normal" }}>{userInfo.userEmail}</Text></Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>UserName  <Text style={{ fontWeight: "normal" }}>{userInfo.userName}</Text></Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontWeight: "bold" }}>Registration date  <Text style={{ fontWeight: "normal" }}>{userInfo.registeredAt.substr(0, userInfo.registeredAt.search("T"))}</Text></Text>
+                    </View>
+                    <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+                        <View >
+                            <Text
+                                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+                                onPress={() => setDisplayName(!displayName)}
+                            >Update Username</Text>
+                            {nameView}
+                        </View>
+                        <View >
+                            <Text
+                                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+                                onPress={() => setDisplayEmail(!displayEmail)}
+                            >Update Email</Text>
+                            {emailView}
+                        </View>
+                        <View >
+                            <Text
+                                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+                                onPress={() => setDisplayPwd(!displayPwd)}
+                            >Update Password</Text>
+                            {pwdView}
+                        </View>
+                    </View>
+                </View>
             </View>
             <View style={styles.historyInfo}>
                 <Button
-                    title={`${display === false ? "show" : "hide"} history`}
+                    title={`${displayActivity === false ? "show" : "hide"} history`}
                     onPress={() => {
                         getUserActivity();
-                        setDisplay(!display);
+                        setDisplayActivity(!displayActivity);
                     }}
                 />
                 {historyView}
@@ -193,14 +408,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        alignItems: "center",
         justifyContent: "flex-start",
         backgroundColor: "grey",
     },
     profileInfo: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "flex-start"
+        justifyContent: "flex-start",
+
     },
     historyInfo: {
         flex: 1,

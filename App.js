@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './components/home';
 import RegisterScreen from './components/register';
 import LoginScreen from './components/login';
+import LogoutScreen from './components/logout';
 import ProfileScreen from './components/profile';
 import CategoryScreen from './components/category';
 import AboutScreen from './components/about';
@@ -21,9 +22,9 @@ import { configureData } from './components/configure';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-    const currencyURL = "https://openexchangerates.org/api/latest.json?app_id=3fde0830b3a24434957729d6ffae3f4b";
+    const currencyURL = configureData.currency;
 
-    const serverURL = "https://cpa-server.herokuapp.com/";
+    const serverURL = configureData.server;
 
 
 
@@ -34,6 +35,7 @@ const App = () => {
                     <Stack.Screen name="Home" component={HomeScreen} />
                     <Stack.Screen name="Register" component={RegisterScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Logout" component={LogoutScreen} />
                     <Stack.Screen name="Profile" component={ProfileScreen} />
                     <Stack.Screen name="About" component={AboutScreen} />
                     <Stack.Screen name="Category" component={CategoryScreen} />

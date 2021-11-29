@@ -7,51 +7,55 @@ const HomeScreen = ({ navigation }) => {
             <Image
                 source={require("../assets/icon.png")}
                 style={styles.backgroundImage} />
-            <View style={{ flex: 1 }}>
-                <View style={{ flex: 1 }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 35 }}> Unit Converter </Text>
-                </View>
-                <View style={{ flex: 1, flexDirection: "row" }}>
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="App Description"
+            <View style={{ flex: 1, justifyContent: "center" }}>
+                <View style={{ flex: 1, alignItems: "center" }}>
+                    <View style={{ flex: 1, marginBottom: -20, marginTop: 100 }}>
+                        <Text style={{ fontWeight: "bold", fontSize: 40 }}> Unit Converter </Text>
+                    </View>
+                    <View style={{ flexDirection: "row", flex: 1, justifyContent: "space-around", alignItems: "center" }}>
+                        <Text
+                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
                             onPress={
                                 () => navigation.navigate('About')}
-                        />
-                    </View>
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="Start Conversion"
+                        > App Description</Text>
+                        <Text
+                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
                             onPress={
                                 () => navigation.navigate('Category')}
-                        />
+                        > Start Conversion</Text>
                     </View>
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="Register"
-                            onPress={() => navigation.navigate('Register', { version: "CPA 5.0" })}
-                        />
+                    <View style={{ flexDirection: "row", flex: 1, justifyContent: "space-around", alignItems: "center" }}>
+                        <Text
+                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
+                            onPress={
+                                () => navigation.navigate('Register', { version: "CPA 5.0" })}
+                        > Register</Text>
+                        <Text
+                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
+                            onPress={
+                                () => navigation.navigate('Login', { version: "CPA 5.0" })}
+                        > Login</Text>
+                        <Text
+                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
+                            onPress={
+                                () => navigation.navigate('Logout', { version: "CPA 5.0" })}
+                        > Logout</Text>
+                        <Text
+                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
+                            onPress={
+                                () => navigation.navigate('Profile', { version: "CPA 5.0" })}
+                        > Profile</Text>
                     </View>
-
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="Login"
-                            onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
-                        />
-                    </View>
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <Button title="Profile"
-                            onPress={() => navigation.navigate('Profile', { version: "CPA 5.0" })}
-                        />
-                    </View>
-
                 </View>
             </View>
-        </View>
+        </View >
     );
 };
 
 const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
-        width: "100%",
-        height: "100%",
+        resizeMode: 'contain'
     },
     containerHome: {
         flex: 1,
