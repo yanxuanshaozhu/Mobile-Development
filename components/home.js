@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
     return (
@@ -9,42 +9,68 @@ const HomeScreen = ({ navigation }) => {
                 style={styles.backgroundImage} />
             <View style={{ flex: 1, justifyContent: "center" }}>
                 <View style={{ flex: 1, alignItems: "center" }}>
-                    <View style={{ flex: 1, marginBottom: -20, marginTop: 100 }}>
+                    <View style={{ flex: 1 }}>
                         <Text style={{ fontWeight: "bold", fontSize: 40 }}> Unit Converter </Text>
                     </View>
-                    <View style={{ flexDirection: "row", flex: 1, justifyContent: "space-around", alignItems: "center" }}>
-                        <Text
-                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
-                            onPress={
-                                () => navigation.navigate('About')}
-                        > App Description</Text>
-                        <Text
-                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
-                            onPress={
-                                () => navigation.navigate('Category')}
-                        > Start Conversion</Text>
+
+                    <View style={{ flexDirection: "row", flex: 1, alignItems: "center", justifyContent: "space-around" }}>
+                        <View style={{ flex: 1, justifyContent: "center", marginRight: 2 }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                onPress={
+                                    () => navigation.navigate('About')}
+                            >
+                                <Text style={{ color: "red", fontSize: 20, margin: 3 }}> App Description</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: "center", marginLeft: 2 }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                onPress={
+                                    () => navigation.navigate('Category')}
+                            >
+                                <Text style={{ color: "red", fontSize: 20, margin: 3 }}> Start Conversion</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={{ flexDirection: "row", flex: 1, justifyContent: "space-around", alignItems: "center" }}>
-                        <Text
-                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
-                            onPress={
-                                () => navigation.navigate('Register', { version: "CPA 5.0" })}
-                        > Register</Text>
-                        <Text
-                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
-                            onPress={
-                                () => navigation.navigate('Login', { version: "CPA 5.0" })}
-                        > Login</Text>
-                        <Text
-                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
-                            onPress={
-                                () => navigation.navigate('Logout', { version: "CPA 5.0" })}
-                        > Logout</Text>
-                        <Text
-                            style={{ backgroundColor: "black", color: "red", fontSize: 20, margin: 10 }}
-                            onPress={
-                                () => navigation.navigate('Profile', { version: "CPA 5.0" })}
-                        > Profile</Text>
+
+                    <View style={{ flexDirection: "row", flex: 1, alignItems: "center", justifyContent: "space-around" }}>
+                        <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                onPress={
+                                    () => navigation.navigate('Register', { version: "CPA 5.0" })}
+                            >
+                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}>Register</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                onPress={
+                                    () => navigation.navigate('Login', { version: "CPA 5.0" })}
+                            >
+                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}> Login</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                onPress={
+                                    () => navigation.navigate('Logout', { version: "CPA 5.0" })}
+                            >
+                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}> Logout</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                onPress={
+                                    () => navigation.navigate('Profile', { version: "CPA 5.0" })}
+                            >
+                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}> Profile</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
