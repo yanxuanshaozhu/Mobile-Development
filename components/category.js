@@ -1,14 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useValue } from './ValueContext';
 
 const CategoryScreen = ({ navigation }) => {
+    const { currentValue, setCurrentValue } = useValue();
+
     return (
         <View style={styles.containerCategory} >
             <View style={{ flex: 1, alignItems: "center" }}>
-                <Text style={{ fontSize: 20, color: "black" }}>
-                    Choose one category to do conversion
-                </Text>
+                <Text style={{ fontSize: 20 }}>Unit Converter Version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20}}>Choose One Category to Do Conversion</Text>
             </View>
+
             <View style={styles.rowCategory}>
                 <View style={styles.buttonView}>
                     <TouchableOpacity
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
         backgroundColor: "grey",
     },
     rowCategory: {
-        flex: 5,
+        flex: 1,
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "center"

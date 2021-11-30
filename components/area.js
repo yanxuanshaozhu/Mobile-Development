@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
 import { useValue } from './ValueContext';
 import Axios from "axios";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-const AreaScreen = () => {
+const AreaScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue();
     const [userInfo, setUserInfo] = useState({});
     const [num, setNum] = useState(0);
@@ -50,14 +51,15 @@ const AreaScreen = () => {
     let saveView = <View></View>
     if (userInfo["registered"] === true) {
         saveView = <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
-
-            <Button
-                title="Save conversion"
+            <TouchableOpacity
+                style={{ alignItems: "center", backgroundColor: "black" }}
                 onPress={() => {
                     let area = `${num} ${itemValue1} ${itemValue2} ${output}`
                     storeData((area));
                 }}
-            />
+            >
+                <Text style={{ color: "red", margin: 5 }}>Save Conversion Result</Text>
+            </TouchableOpacity>
         </View>
     }
 
@@ -65,9 +67,9 @@ const AreaScreen = () => {
         <TextInput
             style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
             onChangeText={(num) => setNum(num)}
-            value={num}
-            keyboardType="numeric">
-        </TextInput>
+            value={num.toString()}
+            keyboardType="numeric" />
+
         <Picker
             selectedValue={itemValue1}
             onValueChange={(itemValue1, itemIndex) =>
@@ -106,12 +108,26 @@ const AreaScreen = () => {
 
     return (
         <View style={styles.containerArea}>
-            <ScreenTemplate
-                left={left}
-                right={right}
-            />
+            <View style={{ alignItems: "center", flex: 1 }}>
+                <Text style={{ fontSize: 20}}>Unit Converter Version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20}}> Convert Area Units Here</Text>
+                <ScreenTemplate
+                    left={left}
+                    right={right}
+                />
+                <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
+                    <TouchableOpacity
+                        style={{ alignItems: "center", backgroundColor: "black" }}
+                        onPress={() => navigation.navigate("C")}
+                    >
+                        <Text style={{ color: "red", margin: 5 }}>Back to Category</Text>
+
+                    </TouchableOpacity>
+                </View>
+            </View>
             {saveView}
-        </View>
+        </View >
+
     );
 };
 

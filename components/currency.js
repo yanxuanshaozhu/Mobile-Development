@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
 import { useValue } from './ValueContext';
 import Axios from "axios";
 
-const CurrencyScreen = () => {
+const CurrencyScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue();
     const [userInfo, setUserInfo] = useState({});
     const [num, setNum] = useState(0);
@@ -67,14 +67,15 @@ const CurrencyScreen = () => {
     let saveView = <View></View>
     if (userInfo.registered) {
         saveView = <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
-
-            <Button
-                title="Save data"
+            <TouchableOpacity
+                style={{ alignItems: "center", backgroundColor: "black" }}
                 onPress={() => {
                     let currency = `${num} ${itemValue1} ${itemValue2} ${output}`
                     storeData(currency);
                 }}
-            />
+            >
+                <Text style={{ backgroundColor: "black", color: "red", margin: 5 }}>Save Conversion Result</Text>
+            </TouchableOpacity>
         </View>
     }
 
@@ -82,7 +83,7 @@ const CurrencyScreen = () => {
         <TextInput
             style={{ flex: 1, backgroundColor: "#03fc77", textAlign: "center", fontSize: 10 }}
             onChangeText={(num) => setNum(num)}
-            value={num}
+            value={num.toString()}
             keyboardType="numeric">
         </TextInput>
         <Picker
@@ -124,10 +125,23 @@ const CurrencyScreen = () => {
 
     return (
         <View style={styles.containerCurrency}>
-            <ScreenTemplate
-                left={left}
-                right={right}
-            />
+            <View style={{ alignItems: "center", flex: 1 }}>
+                <Text style={{ fontSize: 20 }}>Unit Converter Version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20 }}> Convert Currency Units Here</Text>
+                <ScreenTemplate
+                    left={left}
+                    right={right}
+                />
+                <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
+                    <TouchableOpacity
+                        style={{ alignItems: "center", backgroundColor: "black" }}
+                        onPress={() => navigation.navigate("C")}
+                    >
+                        <Text style={{ color: "red", margin: 5 }}>Back to Category</Text>
+
+                    </TouchableOpacity>
+                </View>
+            </View>
             {saveView}
         </View>
 

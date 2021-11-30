@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import HomeScreen from './components/home';
 import RegisterScreen from './components/register';
@@ -19,7 +20,23 @@ import WeightScreen from "./components/weight";
 import CurrencyScreen from './components/currency';
 import ValueProvider from './components/ValueContext';
 import { configureData } from './components/configure';
+
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const CategoryStack = () => {
+    return (
+        <Stack.Navigator initialRouteName="Category">
+            <Stack.Screen name="C" component={CategoryScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Area" component={AreaScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Volume" component={VolumeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Speed" component={SpeedScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Length" component={LengthScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Weight" component={WeightScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Currency" component={CurrencyScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    )
+}
 
 const App = () => {
     const currencyURL = configureData.currency;
@@ -29,23 +46,17 @@ const App = () => {
 
 
     return (
-        <ValueProvider value={{ "serverURL": serverURL, "currencyURL": currencyURL }}>
+        <ValueProvider value={{ "serverURL": serverURL, "currencyURL": currencyURL, "version": "CPA 5.0" }}>
             <NavigationContainer >
-                <Stack.Navigator initialRouteName="Home" >
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Register" component={RegisterScreen} />
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen name="Logout" component={LogoutScreen} />
-                    <Stack.Screen name="Profile" component={ProfileScreen} />
-                    <Stack.Screen name="About" component={AboutScreen} />
-                    <Stack.Screen name="Category" component={CategoryScreen} />
-                    <Stack.Screen name="Area" component={AreaScreen} />
-                    <Stack.Screen name="Volume" component={VolumeScreen} />
-                    <Stack.Screen name="Speed" component={SpeedScreen} />
-                    <Stack.Screen name="Length" component={LengthScreen} />
-                    <Stack.Screen name="Weight" component={WeightScreen} />
-                    <Stack.Screen name="Currency" component={CurrencyScreen} />
-                </Stack.Navigator>
+                <Drawer.Navigator initialRouteName="Home" >
+                    <Drawer.Screen name="Home" component={HomeScreen} />
+                    <Drawer.Screen name="About" component={AboutScreen} />
+                    <Drawer.Screen name="Category" component={CategoryStack} />
+                    <Drawer.Screen name="Register" component={RegisterScreen} />
+                    <Drawer.Screen name="Login" component={LoginScreen} />
+                    <Drawer.Screen name="Logout" component={LogoutScreen} />
+                    <Drawer.Screen name="Profile" component={ProfileScreen} />
+                </Drawer.Navigator>
             </NavigationContainer>
         </ValueProvider>
     );

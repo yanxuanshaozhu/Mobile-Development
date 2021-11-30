@@ -5,7 +5,7 @@ import { useValue } from "./ValueContext";
 import Axios from "axios";
 
 
-const LoginScreen = ({ navigation, route }) => {
+const LoginScreen = ({ navigation }) => {
 
     const { currentValue, setCurrentValue } = useValue()
     const [email, setEmail] = useState("");
@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation, route }) => {
                 <Text style={{ color: "red" }}> Login succeeded!</Text>
                 <Button
                     title="view profile"
-                    onPress={() => navigation.navigate('Profile', { version: "CPA 5.0" })}
+                    onPress={() => navigation.navigate('Profile')}
                 />
                 <Button
                     title="start conversion"
@@ -83,7 +83,7 @@ const LoginScreen = ({ navigation, route }) => {
                 <Text style={{ color: "red" }}>Login failed: account does not exist, please register first</Text>
                 <Button
                     title="Register"
-                    onPress={() => navigation.navigate('Register', { version: "CPA 5.0" })}
+                    onPress={() => navigation.navigate('Register')}
                 />
             </View>)
         } else if (value == 3) {
@@ -128,11 +128,8 @@ const LoginScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={{ alignItems: "center" }}>
-                <Text style={{ fontSize: 20, textAlign: "center" }}>Unit Converter version <Text style={{ color: "red" }}>{route.params.version}</Text></Text>
-            </View>
-
-            <View>
-                <Text style={{ fontSize: 20, textAlign: "center" }}>Login your account here</Text>
+                <Text style={{ fontSize: 20 }}>Unit Converter version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20 }}>Login your account here</Text>
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -174,7 +171,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         backgroundColor: "grey",
     },
 });

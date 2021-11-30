@@ -5,7 +5,7 @@ import Axios from "axios";
 import { useValue } from './ValueContext';
 
 
-const ProfileScreen = ({ navigation, route }) => {
+const ProfileScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue()
     const [userInfo, setUserInfo] = useState({ userEmail: "", userName: "", registeredAt: "" });
     const [userActivity, setUserActivity] = useState({});
@@ -169,48 +169,48 @@ const ProfileScreen = ({ navigation, route }) => {
     const renderArea = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center" }}>
-                <Text> {ls[0]} {areaName[ls[1]]} = {ls[3]} {areaName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
+                <Text style={{ color: "red" }}> {ls[0]} {areaName[ls[1]]} = {ls[3]} {areaName[ls[2]]}</Text>
             </View>
         );
     }
     const renderLength = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center" }}>
-                <Text> {ls[0]} {lengthName[ls[1]]} = {ls[3]} {lengthName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
+                <Text style={{ color: "red" }}> {ls[0]} {lengthName[ls[1]]} = {ls[3]} {lengthName[ls[2]]}</Text>
             </View>
         );
     }
     const renderSpeed = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center" }}>
-                <Text> {ls[0]} {speedName[ls[1]]} = {ls[3]} {speedName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
+                <Text style={{ color: "red" }}> {ls[0]} {speedName[ls[1]]} = {ls[3]} {speedName[ls[2]]}</Text>
             </View>
         );
     }
     const renderVolume = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center" }}>
-                <Text> {ls[0]} {volumeName[ls[1]]} = {ls[3]} {volumeName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
+                <Text style={{ color: "red" }}>{ls[0]} {volumeName[ls[1]]} = {ls[3]} {volumeName[ls[2]]}</Text>
             </View>
         );
     }
     const renderWeight = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center" }}>
-                <Text> {ls[0]} {weightName[ls[1]]} = {ls[3]} {weightName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
+                <Text style={{ color: "red" }}>{ls[0]} {weightName[ls[1]]} = {ls[3]} {weightName[ls[2]]}</Text>
             </View>
         );
     }
     const renderCurrency = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center" }}>
-                <Text> {ls[0]} {currencyName[ls[1]]} = {ls[3]} {currencyName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
+                <Text style={{ color: "red" }}> {ls[0]} {currencyName[ls[1]]} = {ls[3]} {currencyName[ls[2]]}</Text>
             </View>
         );
     }
@@ -290,7 +290,7 @@ const ProfileScreen = ({ navigation, route }) => {
     if (displayActivity) {
         historyView = <View style={styles.historyView}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <Text style={{ fontWeight: "bold" }}> Area conversion history:</Text>
+                <Text style={{ fontWeight: "bold", margin: 5 }}> Area conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["area"]}
@@ -299,7 +299,7 @@ const ProfileScreen = ({ navigation, route }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold" }}> Length conversion history:</Text>
+                <Text style={{ fontWeight: "bold", margin: 5 }}> Length conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["length"]}
@@ -308,7 +308,7 @@ const ProfileScreen = ({ navigation, route }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold" }}> Speed conversion history:</Text>
+                <Text style={{ fontWeight: "bold", margin: 5 }}> Speed conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["speed"]}
@@ -317,7 +317,7 @@ const ProfileScreen = ({ navigation, route }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold" }}> Volume conversion history:</Text>
+                <Text style={{ fontWeight: "bold", margin: 5 }}> Volume conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["volume"]}
@@ -326,7 +326,7 @@ const ProfileScreen = ({ navigation, route }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold" }}> Weight conversion history:</Text>
+                <Text style={{ fontWeight: "bold", margin: 5 }}> Weight conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["weight"]}
@@ -335,7 +335,7 @@ const ProfileScreen = ({ navigation, route }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold" }}> Currency conversion history:</Text>
+                <Text style={{ fontWeight: "bold", margin: 5 }}> Currency conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["currency"]}
@@ -349,13 +349,12 @@ const ProfileScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.profileInfo}>
-                <View style={{ flex: 1, justifyContent: "flex-start" }}>
-                    <Text style={{ fontSize: 20, textAlign: "center" }}>Unit Converter version <Text style={{ color: "red" }}>{route.params.version}</Text></Text>
+                <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
+                    <Text style={{ fontSize: 20 }}>Unit Converter version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                    <Text style={{ fontSize: 20 }}> User Information </Text>
                 </View>
-                <View style={{ flex: 5 }}>
-                    <View style={{ alignItems: "center" }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 20 }}> User Information </Text>
-                    </View>
+                <View style={{ flex: 2 }}>
+
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontWeight: "bold" }}>UserEmail  <Text style={{ fontWeight: "normal" }}>{userInfo.userEmail}</Text></Text>
                     </View>

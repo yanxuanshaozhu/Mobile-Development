@@ -16,7 +16,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ flexDirection: "row", flex: 1, alignItems: "center", justifyContent: "space-around" }}>
                         <View style={{ flex: 1, justifyContent: "center", marginRight: 2 }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                style={{ backgroundColor: "black", alignItems: "center", height: 60, justifyContent: "center" }}
                                 onPress={
                                     () => navigation.navigate('About')}
                             >
@@ -25,50 +25,50 @@ const HomeScreen = ({ navigation }) => {
                         </View>
                         <View style={{ flex: 1, justifyContent: "center", marginLeft: 2 }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                style={{ backgroundColor: "black", alignItems: "center", height: 60, justifyContent: "center" }}
                                 onPress={
                                     () => navigation.navigate('Category')}
                             >
                                 <Text style={{ color: "red", fontSize: 20, margin: 3 }}> Start Conversion</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View> 
 
                     <View style={{ flexDirection: "row", flex: 1, alignItems: "center", justifyContent: "space-around" }}>
                         <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                style={{ backgroundColor: "black", alignItems: "center", height: 60, justifyContent: "center" }}
                                 onPress={
                                     () => navigation.navigate('Register', { version: "CPA 5.0" })}
                             >
-                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}>Register</Text>
+                                <Text style={{ color: "red", fontSize: 16, margin: 2 }}>Register</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                style={{ backgroundColor: "black", alignItems: "center", height: 60, justifyContent: "center" }}
                                 onPress={
                                     () => navigation.navigate('Login', { version: "CPA 5.0" })}
                             >
-                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}> Login</Text>
+                                <Text style={{ color: "red", fontSize: 16, margin: 2 }}> Login</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                style={{ backgroundColor: "black", alignItems: "center", height: 60, justifyContent: "center" }}
                                 onPress={
                                     () => navigation.navigate('Logout', { version: "CPA 5.0" })}
                             >
-                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}> Logout</Text>
+                                <Text style={{ color: "red", fontSize: 16, margin: 2 }}> Logout</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1, justifyContent: "center", marginRight: 1, marginLeft: 1 }}>
                             <TouchableOpacity
-                                style={{ backgroundColor: "black", alignItems: "center", height:60, justifyContent:"center" }}
+                                style={{ backgroundColor: "black", alignItems: "center", height: 60, justifyContent: "center" }}
                                 onPress={
                                     () => navigation.navigate('Profile', { version: "CPA 5.0" })}
                             >
-                                <Text style={{ color: "red", fontSize: 18, margin: 1 }}> Profile</Text>
+                                <Text style={{ color: "red", fontSize: 16, margin: 2 }}> Profile</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -81,7 +81,8 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
-        resizeMode: 'contain'
+        height: 400,
+        width: 400,
     },
     containerHome: {
         flex: 1,

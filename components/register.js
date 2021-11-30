@@ -4,7 +4,7 @@ import { useValue } from "./ValueContext";
 import Axios from "axios";
 
 
-const RegisterScreen = ({ navigation, route }) => {
+const RegisterScreen = ({ navigation }) => {
 
     const { currentValue, setCurrentValue } = useValue()
     const [name, setName] = useState("");
@@ -12,7 +12,7 @@ const RegisterScreen = ({ navigation, route }) => {
     const [password, setPassword] = useState("");
     const [result, setResult] = useState(0);
 
-    
+
     const checkEmail = (input) => {
         let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         return re.test(input);
@@ -136,11 +136,8 @@ const RegisterScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={{ alignItems: "center" }}>
-                <Text style={{ fontSize: 20, textAlign: "center" }}>Unit Converter version <Text style={{ color: "red" }}>{route.params.version}</Text></Text>
-            </View>
-
-            <View>
-                <Text style={{ fontSize: 20, textAlign: "center" }}>Register an account here</Text>
+                <Text style={{ fontSize: 20 }}>Unit Converter version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20 }}>Register an account here</Text>
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -196,7 +193,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: "center",
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         backgroundColor: "grey",
     },
 });
