@@ -1,12 +1,23 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useValue } from "./ValueContext";
 import Axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const LoginScreen = ({ navigation }) => {
-
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            setEmail("");
+            setPassword("");
+            setResult(0);
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
     const { currentValue, setCurrentValue } = useValue()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -69,22 +80,28 @@ const LoginScreen = ({ navigation }) => {
         } else if (value === 1) {
             return (<View style={{ alignItems: "center" }}>
                 <Text style={{ color: "red" }}> Login succeeded!</Text>
-                <Button
-                    title="view profile"
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginVertical: 2 }}
                     onPress={() => navigation.navigate('Profile')}
-                />
-                <Button
-                    title="start conversion"
-                    onPress={() => navigation.navigate("Category")}
-                />
+                >
+                    <Text style={{ color: "red", margin: 5 }}>View Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginBottom: 2 }}
+                    onPress={() => navigation.navigate('Category')}
+                >
+                    <Text style={{ color: "red", margin: 5 }}>Start Conversion</Text>
+                </TouchableOpacity>
             </View>)
         } else if (value === 2) {
             return (<View style={{ alignItems: "center" }}>
                 <Text style={{ color: "red" }}>Login failed: account does not exist, please register first</Text>
-                <Button
-                    title="Register"
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginVertical: 2 }}
                     onPress={() => navigation.navigate('Register')}
-                />
+                >
+                    <Text style={{ color: "red", margin: 5 }}>Register</Text>
+                </TouchableOpacity>
             </View>)
         } else if (value == 3) {
             return (<View>
@@ -156,12 +173,16 @@ const LoginScreen = ({ navigation }) => {
             </View>
 
             {validatePassword(password)}
-            <Button
-                title="Login"
+
+
+            <TouchableOpacity
+                style={{ backgroundColor: "black", marginVertical: 2 }}
                 onPress={() => {
                     userLogin();
                 }}
-            />
+            >
+                <Text style ={{color:"red", margin:5}}> Login </Text>
+            </TouchableOpacity>
             {displayResult(result)}
         </View>
     );

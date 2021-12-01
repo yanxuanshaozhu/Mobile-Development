@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from "axios";
 import { useValue } from './ValueContext';
@@ -8,14 +9,17 @@ import { useValue } from './ValueContext';
 const ProfileScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue()
     const [userInfo, setUserInfo] = useState({ userEmail: "", userName: "", registeredAt: "" });
-    const [userActivity, setUserActivity] = useState({});
+    const [userActivity, setUserActivity] = useState({ "area": [], "length": [], "speed": [], "volume": [], "weight": [], "currency": [] });
+
     const [displayActivity, setDisplayActivity] = useState(false);
     const [displayEmail, setDisplayEmail] = useState(false);
     const [displayName, setDisplayName] = useState(false);
     const [displayPwd, setDisplayPwd] = useState(false);
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const [resultEmail, setResultEmail] = useState(1);
     const [resultName, setResultName] = useState(1);
     const [resultPwd, setResultPwd] = useState(1);
@@ -28,17 +32,31 @@ const ProfileScreen = ({ navigation }) => {
     const currencyName = { "USD": "United States Dollar", "CNY": "Chinese Yuan", "GBP": "Great Britain Pound", "EUR": "EURO", "CAD": "Canadian Dollar", "HKD": "Hong Kong Dollar", "INR": "Indian Rupee" }
 
 
-    useEffect(() => {
-        getUserInfo();
-    }
-        , [])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            getUserInfo();
+            setDisplayActivity(false);
+            setDisplayEmail(false);
+            setDisplayName(false);
+            setDisplayPwd(false);
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
 
     const getUserInfo = async () => {
+        console.log("getUserInfo");
         try {
             const jsonValue = await AsyncStorage.getItem("@userData");
             if (jsonValue != null) {
                 let info = JSON.parse(jsonValue);
                 setUserInfo(info);
+            } else {
+                setUserActivity({ "area": [], "length": [], "speed": [], "volume": [], "weight": [], "currency": [] })
+                setUserInfo({ userEmail: "", userName: "", registeredAt: "" })
             }
         } catch (e) {
             console.dir(e);
@@ -62,155 +80,201 @@ const ProfileScreen = ({ navigation }) => {
         }
     }
 
+    const checkEmail = (input) => {
+        let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        return re.test(input);
+    }
+
     const updateEmail = async () => {
         try {
-            console.log("updateEmail start")
-            const updateData = { userEmail: userInfo.userEmail };
-            if (email != "") {
-                updateData["newEmail"] = email;
-            }
-            let serverURL = currentValue.serverURL;
-            const response = await Axios({
-                method: "post",
-                url: "/updateUserInfo",
-                baseURL: serverURL,
-                data: updateData
-            });
-            console.log("update email response")
-            console.log(response.data["status"]);
-            if (response.data["status"] === 0) {
-                let date = userInfo["registeredAt"];
-                let newName = name === "" ? userInfo["userName"] : name;
-                let newEmail = email === "" ? userInfo["userEmail"] : email;
-                let newData = {
-                    "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+            // The user should login to update information
+            if (userInfo["registeredAt"] !== "") {
+                // The input email cannot be empty
+                if (email !== "") {
+                    // The input email should be valid
+                    if (checkEmail(email)) {
+                        const updateData = { userEmail: userInfo.userEmail };
+                        updateData["newEmail"] = email;
+                        let serverURL = currentValue.serverURL;
+                        const response = await Axios({
+                            method: "post",
+                            url: "/updateUserInfo",
+                            baseURL: serverURL,
+                            data: updateData
+                        });
+                        // If update is successful, update asynchronous storage and userInfo
+                        if (response.data["status"] === 0) {
+                            let date = userInfo["registeredAt"];
+                            let newName = name === "" ? userInfo["userName"] : name;
+                            let newEmail = email === "" ? userInfo["userEmail"] : email;
+                            let newData = {
+                                "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+                            }
+                            await AsyncStorage.setItem("@userData",
+                                JSON.stringify(newData));
+                            setUserInfo(newData);
+                        }
+                        setResultEmail(response.data["status"]);
+                    } else {
+                        setResultEmail(3);
+                    }
+                } else {
+                    setResultEmail(4);
                 }
-                await AsyncStorage.setItem("@userData",
-                    JSON.stringify(newData));
-                setUserInfo(newData);
+            } else {
+                setResultEmail(5)
             }
-            setResultEmail(response.data["status"]);
-            console.log("update email end")
         } catch (error) {
             console.dir(error);
         }
+    }
+
+    const checkName = (input) => {
+        let c = input[0].toLowerCase();
+        return "a" <= c && c <= "z";
+
     }
 
     const updateUserName = async () => {
         try {
-            console.log("updateName start")
-            const updateData = { userEmail: userInfo.userEmail };
-            if (name != "") {
-                updateData["userName"] = name;
-            }
-            let serverURL = currentValue.serverURL;
-            const response = await Axios({
-                method: "post",
-                url: "/updateUserInfo",
-                baseURL: serverURL,
-                data: updateData
-            });
-            console.log("update name response")
-            console.log(response.data["status"]);
-            if (response.data["status"] === 0) {
-                let date = userInfo["registeredAt"];
-                let newName = name === "" ? userInfo["userName"] : name;
-                let newEmail = email === "" ? userInfo["userEmail"] : email;
-                let newData = {
-                    "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+            // The user should login to update information
+            if (userInfo["registeredAt"] !== "") {
+                // The new name cannot be empty
+                if (name !== "") {
+                    // The new name should be valid
+                    if (checkName(name)) {
+                        const updateData = { userEmail: userInfo.userEmail };
+                        updateData["userName"] = name;
+                        let serverURL = currentValue.serverURL;
+                        const response = await Axios({
+                            method: "post",
+                            url: "/updateUserInfo",
+                            baseURL: serverURL,
+                            data: updateData
+                        });
+                        // If update is successful, update asynchronous storage userInfo
+                        if (response.data["status"] === 0) {
+                            let date = userInfo["registeredAt"];
+                            let newName = name === "" ? userInfo["userName"] : name;
+                            let newEmail = email === "" ? userInfo["userEmail"] : email;
+                            let newData = {
+                                "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+                            }
+                            await AsyncStorage.setItem("@userData",
+                                JSON.stringify(newData));
+                            setUserInfo(newData);
+                        }
+                        setResultName(response.data["status"]);
+                    } else {
+                        setResultName(3);
+                    }
+                } else {
+                    setResultName(4);
                 }
-                await AsyncStorage.setItem("@userData",
-                    JSON.stringify(newData));
-                setUserInfo(newData);
+            } else {
+                setResultName(5);
             }
-            setResultName(response.data["status"]);
-            console.log("update email end")
         } catch (error) {
             console.dir(error);
         }
+    }
+
+    const checkPassword = (input) => {
+        let re1 = /[a-zA-Z]+/;
+        let re2 = /[0-9]+/;
+        let re3 = /[!@#$%^&*]+/;
+        return re1.test(input) && re2.test(input) && re3.test(input);
     }
 
     const updatePassword = async () => {
         try {
-            console.log("update password  start")
-            const updateData = { userEmail: userInfo.userEmail };
-            if (password != "") {
-                updateData["userPassword"] = password;
-            }
-            let serverURL = currentValue.serverURL;
-            const response = await Axios({
-                method: "post",
-                url: "/updateUserInfo",
-                baseURL: serverURL,
-                data: updateData
-            });
-            console.log("update password response")
-            console.log(response.data["status"]);
-            if (response.data["status"] === 0) {
-                let date = userInfo["registeredAt"];
-                let newName = name === "" ? userInfo["userName"] : name;
-                let newEmail = email === "" ? userInfo["userEmail"] : email;
-                let newData = {
-                    "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+            // The user should login to update information
+            if (userInfo["registeredAt"] !== "") {
+                // The new password cannot be empty
+                if (password !== "") {
+                    // The new password should be valid
+                    if (checkPassword(password)) {
+                        const updateData = { userEmail: userInfo.userEmail };
+                        updateData["userPassword"] = password;
+                        let serverURL = currentValue.serverURL;
+                        const response = await Axios({
+                            method: "post",
+                            url: "/updateUserInfo",
+                            baseURL: serverURL,
+                            data: updateData
+                        });
+                        // If update is successful, update asynchronous storage userInfo
+                        if (response.data["status"] === 0) {
+                            let date = userInfo["registeredAt"];
+                            let newName = name === "" ? userInfo["userName"] : name;
+                            let newEmail = email === "" ? userInfo["userEmail"] : email;
+                            let newData = {
+                                "userEmail": newEmail, "userName": newName, "registered": true, "registeredAt": date
+                            }
+                            await AsyncStorage.setItem("@userData",
+                                JSON.stringify(newData));
+                            setUserInfo(newData);
+                        }
+                        setResultPwd(response.data["status"]);
+                    } else {
+                        setResultPwd(3);
+                    }
+                } else {
+                    setResultPwd(4);
                 }
-                await AsyncStorage.setItem("@userData",
-                    JSON.stringify(newData));
-                setUserInfo(newData);
+            } else {
+                setResultPwd(5);
             }
-            setResultPwd(response.data["status"]);
-            console.log("update password end")
         } catch (error) {
             console.dir(error);
         }
     }
 
-
-
     const renderArea = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
-                <Text style={{ color: "red" }}> {ls[0]} {areaName[ls[1]]} = {ls[3]} {areaName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
+                <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {areaName[ls[1]]} = {ls[3]} {areaName[ls[2]]}</Text>
             </View>
         );
     }
     const renderLength = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
-                <Text style={{ color: "red" }}> {ls[0]} {lengthName[ls[1]]} = {ls[3]} {lengthName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
+                <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {lengthName[ls[1]]} = {ls[3]} {lengthName[ls[2]]}</Text>
             </View>
         );
     }
     const renderSpeed = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
-                <Text style={{ color: "red" }}> {ls[0]} {speedName[ls[1]]} = {ls[3]} {speedName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
+                <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {speedName[ls[1]]} = {ls[3]} {speedName[ls[2]]}</Text>
             </View>
         );
     }
     const renderVolume = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
-                <Text style={{ color: "red" }}>{ls[0]} {volumeName[ls[1]]} = {ls[3]} {volumeName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
+                <Text style={{ color: "red", fontSize: 12 }}>{ls[0]} {volumeName[ls[1]]} = {ls[3]} {volumeName[ls[2]]}</Text>
             </View>
         );
     }
     const renderWeight = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
-                <Text style={{ color: "red" }}>{ls[0]} {weightName[ls[1]]} = {ls[3]} {weightName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
+                <Text style={{ color: "red", fontSize: 12 }}>{ls[0]} {weightName[ls[1]]} = {ls[3]} {weightName[ls[2]]}</Text>
             </View>
         );
     }
     const renderCurrency = (item) => {
         let ls = item["item"].split(" ");
         return (
-            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", margin: 5 }}>
-                <Text style={{ color: "red" }}> {ls[0]} {currencyName[ls[1]]} = {ls[3]} {currencyName[ls[2]]}</Text>
+            <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
+                <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {currencyName[ls[1]]} = {ls[3]} {currencyName[ls[2]]}</Text>
             </View>
         );
     }
@@ -221,32 +285,62 @@ const ProfileScreen = ({ navigation }) => {
     } else if (resultEmail === -2) {
         resultEmailView = <View><Text>Update failed: current email does not link to any existing account!</Text></View>
     } else if (resultEmail === -1) {
-        resultEmailView = <View><Text>Update failed: target email has already been linked to another account, please try again!</Text></View>
+        resultEmailView = <View><Text>Update failed: target email has already been linked to one account, please try again!</Text></View>
+    } else if (resultEmail === 5) {
+        resultEmailView = <View><Text>Update failed: please login first!</Text></View>
+    } else if (resultEmail === 4) {
+        resultEmailView = <View><Text>Update failed: the new email cannot be empty!</Text></View>
+    } else if (resultEmail === 3) {
+        resultEmailView = <View><Text>Update failed: please enter a valid new email!</Text></View>
+    } else if (resultEmail === 2) {
+        resultEmailView = <View></View>
     }
 
     let resultNameView = <View></View>
     if (resultName === 0) {
         resultNameView = <View><Text>Update succeeded!</Text></View>
+    } else if (resultName === 5) {
+        resultNameView = <View><Text>Update failed: please login first!</Text></View>;
+    } else if (resultName === 4) {
+        resultNameView = <View><Text>Update failed: the new username cannot be empty!</Text></View>
+    } else if (resultName === 3) {
+        resultNameView = <View><Text>Update failed: username should start with a character!</Text></View>
+    } else if (resultName === 2) {
+        resultNameView = <View></View>
     }
 
     let resultPwdView = <View></View>
     if (resultPwd === 0) {
         resultPwdView = <View><Text>Update succeeded!</Text></View>
+    } else if (resultPwd === 5) {
+        resultPwdView = <View><Text>Update failed: please login first!</Text></View>;
+    } else if (resultPwd === 4) {
+        resultPwdView = <View><Text>Update failed: password cannot be empty!</Text></View>
+    } else if (resultPwd === 3) {
+        resultPwdView = <View><Text>Update failed: password should contain one character, one number and one special character!</Text></View>
+    } else if (resultPwd === 2) {
+        resultPwdView = <View></View>
     }
+
 
     let emailView = <View></View>
     if (displayEmail) {
         emailView = <View>
             <Text >Enter new Email </Text>
             <TextInput
-                placeholder="Enter your email"
+                placeholder="Enter new email"
                 onChangeText={(email) => { setEmail(email) }}
                 value={email}
             />
-            <Text
-                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+            <TouchableOpacity
+                style={{ backgroundColor: "black", marginBottom: 2 }}
                 onPress={() => updateEmail()}
-            >Submit Update</Text>
+            >
+                <Text
+                    style={{ margin: 5, color: "red" }}
+
+                >Submit Update</Text>
+            </TouchableOpacity>
             {resultEmailView}
         </View>
     }
@@ -256,14 +350,19 @@ const ProfileScreen = ({ navigation }) => {
         nameView = <View>
             <Text >Enter new username </Text>
             <TextInput
-                placeholder="Enter your username"
+                placeholder="Enter new username"
                 onChangeText={(name) => { setName(name) }}
                 value={name}
             />
-            <Text
-                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+            <TouchableOpacity
+                style={{ backgroundColor: "black", marginBottom: 2 }}
                 onPress={() => updateUserName()}
-            >Submit Update</Text>
+            >
+                <Text
+                    style={{ margin: 5, color: "red" }}
+
+                >Submit Update</Text>
+            </TouchableOpacity>
             {resultNameView}
         </View>
     }
@@ -273,24 +372,30 @@ const ProfileScreen = ({ navigation }) => {
         pwdView = <View>
             <Text >Enter new password </Text>
             <TextInput
-                placeholder="Enter your email"
+                placeholder="Enter new password"
                 onChangeText={(password) => { setPassword(password) }}
                 value={password}
                 secureTextEntry={true}
             />
-            <Text
-                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
+            <TouchableOpacity
+                style={{ backgroundColor: "black", marginBottom: 2 }}
                 onPress={() => updatePassword()}
-            >Submit Update</Text>
+            >
+                <Text
+                    style={{ margin: 5, color: "red" }}
+
+                >Submit Update</Text>
+            </TouchableOpacity>
             {resultPwdView}
         </View>
     }
 
     let historyView = <View></View>
     if (displayActivity) {
-        historyView = <View style={styles.historyView}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <Text style={{ fontWeight: "bold", margin: 5 }}> Area conversion history:</Text>
+        historyView = <View >
+
+            <View >
+                <Text style={{ fontWeight: "bold" }}> Area conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["area"]}
@@ -298,8 +403,8 @@ const ProfileScreen = ({ navigation }) => {
                 />
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold", margin: 5 }}> Length conversion history:</Text>
+            <View >
+                <Text style={{ fontWeight: "bold" }}> Length conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["length"]}
@@ -307,8 +412,8 @@ const ProfileScreen = ({ navigation }) => {
                 />
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold", margin: 5 }}> Speed conversion history:</Text>
+            <View >
+                <Text style={{ fontWeight: "bold" }}> Speed conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["speed"]}
@@ -316,8 +421,8 @@ const ProfileScreen = ({ navigation }) => {
                 />
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold", margin: 5 }}> Volume conversion history:</Text>
+            <View >
+                <Text style={{ fontWeight: "bold" }}> Volume conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["volume"]}
@@ -325,8 +430,8 @@ const ProfileScreen = ({ navigation }) => {
                 />
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold", margin: 5 }}> Weight conversion history:</Text>
+            <View >
+                <Text style={{ fontWeight: "bold" }}> Weight conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["weight"]}
@@ -334,27 +439,27 @@ const ProfileScreen = ({ navigation }) => {
                 />
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontWeight: "bold", margin: 5 }}> Currency conversion history:</Text>
+            <View >
+                <Text style={{ fontWeight: "bold" }}> Currency conversion history:</Text>
                 <FlatList
                     horizontal={true}
                     data={userActivity["currency"]}
                     renderItem={renderCurrency}
                 />
             </View>
+
         </View>
     }
 
 
     return (
         <View style={styles.container}>
-            <View style={styles.profileInfo}>
-                <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
-                    <Text style={{ fontSize: 20 }}>Unit Converter version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
-                    <Text style={{ fontSize: 20 }}> User Information </Text>
-                </View>
-                <View style={{ flex: 2 }}>
-
+            <View style={{ justifyContent: "flex-start", alignItems: "center" }}>
+                <Text style={{ fontSize: 20 }}>Unit Converter version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20 }}> User Information </Text>
+            </View>
+            <View style={{ justifyContent: "flex-start" }}>
+                <View style={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontWeight: "bold" }}>UserEmail  <Text style={{ fontWeight: "normal" }}>{userInfo.userEmail}</Text></Text>
                     </View>
@@ -364,48 +469,83 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontWeight: "bold" }}>Registration date  <Text style={{ fontWeight: "normal" }}>{userInfo.registeredAt.substr(0, userInfo.registeredAt.search("T"))}</Text></Text>
                     </View>
-                    <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-                        <View >
+                    <View >
+                        <TouchableOpacity
+                            style={{ backgroundColor: "black", marginVertical: 2 }}
+                            onPress={() => {
+                                setDisplayEmail(!displayEmail);
+                                if (!displayEmail) {
+                                    setResultEmail(2);
+                                    setEmail("");
+                                }
+                            }}
+                        >
                             <Text
-                                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
-                                onPress={() => setDisplayName(!displayName)}
-                            >Update Username</Text>
+                                style={{ margin: 5, color: "red" }}
+                            >Update Email</Text>
+                        </TouchableOpacity>
+                        {emailView}
+                    </View>
+
+                    <View style={{ alignItems: "flex-start" }}>
+                        <View >
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", marginBottom: 2 }}
+                                onPress={() => {
+                                    setDisplayName(!displayName);
+                                    if (!displayName) {
+                                        setResultName(2);
+                                        setName("");
+                                    }
+                                }}
+                            >
+                                <Text
+                                    style={{ margin: 5, color: "red" }}
+                                >Update Username</Text>
+                            </TouchableOpacity>
                             {nameView}
                         </View>
+
                         <View >
-                            <Text
-                                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
-                                onPress={() => setDisplayEmail(!displayEmail)}
-                            >Update Email</Text>
-                            {emailView}
-                        </View>
-                        <View >
-                            <Text
-                                style={{ marginRight: 5, color: "red", backgroundColor: "black" }}
-                                onPress={() => setDisplayPwd(!displayPwd)}
-                            >Update Password</Text>
+                            <TouchableOpacity
+                                style={{ backgroundColor: "black", marginBottom: 2 }}
+                                onPress={() => {
+                                    setDisplayPwd(!displayPwd);
+                                    if (!displayPwd) {
+                                        setResultPwd(2);
+                                        setPassword("");
+                                    }
+                                }}
+                            >
+                                <Text
+                                    style={{ margin: 5, color: "red" }}
+                                >Update Password</Text>
+                            </TouchableOpacity>
                             {pwdView}
                         </View>
                     </View>
                 </View>
+                <View style={{ justifyContent: "flex-start" }}>
+                    <View style={{ alignItems: "center" }}>
+                        <TouchableOpacity
+                            style={{ alignItems: "center", backgroundColor: "black" }}
+                            onPress={() => {
+                                getUserActivity();
+                                setDisplayActivity(!displayActivity);
+                            }}
+                        >
+                            <Text style={{ color: "red", margin: 5 }}>{`${displayActivity === false ? "Show" : "Hide"} History`}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {historyView}
+                </View>
             </View>
-            <View style={styles.historyInfo}>
-                <Button
-                    title={`${displayActivity === false ? "show" : "hide"} history`}
-                    onPress={() => {
-                        getUserActivity();
-                        setDisplayActivity(!displayActivity);
-                    }}
-                />
-                {historyView}
-            </View>
-
         </View>)
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 2,
         flexDirection: 'column',
         justifyContent: "flex-start",
         backgroundColor: "grey",
@@ -417,10 +557,13 @@ const styles = StyleSheet.create({
     },
     historyInfo: {
         flex: 1,
+        justifyContent: "flex-start",
         alignItems: "center",
     },
     historyView: {
-        flex: 1
+        flex: 2,
+        justifyContent: "flex-start",
+        alignItems: "flex-start"
     }
 });
 

@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { useValue } from "./ValueContext";
 import Axios from "axios";
-
+import { useFocusEffect } from '@react-navigation/native';
 
 const RegisterScreen = ({ navigation }) => {
-
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            setEmail("");
+            setName("");
+            setPassword("");
+            setResult(0);
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
     const { currentValue, setCurrentValue } = useValue()
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -23,6 +34,7 @@ const RegisterScreen = ({ navigation }) => {
         return "a" <= c && c <= "z";
 
     }
+
     const checkPassword = (input) => {
         let re1 = /[a-zA-Z]+/;
         let re2 = /[0-9]+/;
@@ -91,19 +103,23 @@ const RegisterScreen = ({ navigation }) => {
             return;
         } else if (value === 1) {
             return (<View style={{ alignItems: "center" }}>
-                <Text style={{ color: "red" }}> Registration is successful! Please Login</Text>
-                <Button
-                    title="Login In"
-                    onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
-                />
+                <Text style={{ color: "red" }}> Registration is successful! Please login</Text>
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginVertical: 2 }}
+                    onPress={() => navigation.navigate('Login')}
+                >
+                    <Text style={{ color: "red", margin: 5 }}> Login</Text>
+                </TouchableOpacity>
             </View>)
         } else if (result === 2) {
             return (<View style={{ alignItems: "center" }}>
-                <Text style={{ color: "red" }}>Registration failed, this email has ready linked to one account, please go to login</Text>
-                <Button
-                    title="Login In"
-                    onPress={() => navigation.navigate('Login', { version: "CPA 5.0" })}
-                />
+                <Text style={{ color: "red" }}>Registration failed, this email has ready linked to one account, please login</Text>
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginVertical: 2 }}
+                    onPress={() => navigation.navigate('Login')}
+                >
+                    <Text style={{ color: "red", margin: 5 }}> Login</Text>
+                </TouchableOpacity>
             </View>)
         }
     }
@@ -176,12 +192,14 @@ const RegisterScreen = ({ navigation }) => {
             </View>
 
             {validatePassword(password)}
-            <Button
-                title="Register"
+            <TouchableOpacity
+                style={{ backgroundColor: "black", marginVertical: 2 }}
                 onPress={() => {
                     userRegistration();
                 }}
-            />
+            >
+                <Text style={{ color: "red", margin: 5 }}> Register</Text>
+            </TouchableOpacity>
             {displayResult(result)}
 
 

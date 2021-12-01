@@ -48,7 +48,7 @@ const App = () => {
     return (
         <ValueProvider value={{ "serverURL": serverURL, "currencyURL": currencyURL, "version": "CPA 5.0" }}>
             <NavigationContainer >
-                <Drawer.Navigator initialRouteName="Home" >
+                <Drawer.Navigator initialRouteName="Home" screenOptions={{ drawerActiveTintColor: "red" }}>
                     <Drawer.Screen name="Home" component={HomeScreen} />
                     <Drawer.Screen name="About" component={AboutScreen} />
                     <Drawer.Screen name="Category" component={CategoryStack} />

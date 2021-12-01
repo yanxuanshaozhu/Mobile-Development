@@ -1,27 +1,52 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useValue } from "./ValueContext";
+import { useFocusEffect } from '@react-navigation/native';
 
 const LogoutScreen = ({ navigation }) => {
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            setDisplay(false);
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
     const { currentValue, setCurrentValue } = useValue();
     const [display, setDisplay] = useState(false);
 
     let displayView = <View></View>
     if (display) {
-        displayView = <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-            <Button
-                title="home page"
-                onPress={() => navigation.navigate('Home')}
-            />
-            <Button
-                title="start conversion"
-                onPress={() => navigation.navigate('Category')}
-            />
-            <Button
-                title="login again"
-                onPress={() => navigation.navigate('Login')}
-            />
+        displayView = <View >
+            <View style={{ alignItems: "center" }}>
+                <Text> Logout successfully!</Text>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginHorizontal: 5 }}
+                    onPress={() => navigation.navigate('Home')}
+                >
+                    <Text style={{ color: "red", margin: 5 }}>Home Page</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginRight: 5 }}
+                    onPress={() => navigation.navigate('Category')}
+                >
+                    <Text style={{ color: "red", margin: 5 }}>Start Conversion</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={{ backgroundColor: "black", marginRight: 5 }}
+                    onPress={() => navigation.navigate('Login')}
+                >
+                    <Text style={{ color: "red", margin: 5 }}>Login Again</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     }
 
@@ -40,10 +65,12 @@ const LogoutScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 20 }}>Unit Converter version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
                 <Text style={{ fontSize: 20 }}>Logout your account here</Text>
             </View>
-            <Button
-                title="logout"
+            <TouchableOpacity
+                style={{ backgroundColor: "black" }}
                 onPress={() => userLogout()}
-            />
+            >
+                <Text style={{ color: "red", margin: 5 }}>Logout</Text>
+            </TouchableOpacity>
             {displayView}
         </View>
     );

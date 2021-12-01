@@ -41,7 +41,7 @@ const AboutScreen = ({ navigation }) => {
                 <TouchableOpacity
                     style={{ backgroundColor: "black" }}
                     onPress={
-                        () => navigation.navigate('C')}
+                        () => navigation.navigate('Category')}
                 >
                     <Text style={{ color: "red", margin: 5 }}>Start Conversion</Text>
                 </TouchableOpacity>
