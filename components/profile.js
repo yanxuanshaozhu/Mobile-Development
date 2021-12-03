@@ -65,14 +65,17 @@ const ProfileScreen = ({ navigation }) => {
             if (userInfo.userEmail != "") {
                 let email = userInfo.userEmail;
                 let baseURL = currentValue.serverURL;
-                Axios({
+                const response = await Axios({
                     method: "post",
                     url: "/getUserActivity",
                     baseURL: baseURL,
                     data: { "userEmail": email },
-                }).then((response) => {
-                    setUserActivity(response.data);
                 })
+                if (response.data["status"] === true) {
+                    setUserActivity(response.data)
+                } else {
+                    setUserActivity({ "area": [], "length": [], "speed": [], "volume": [], "weight": [], "currency": [] });
+                }
             } else { setUserActivity({ "area": [], "length": [], "speed": [], "volume": [], "weight": [], "currency": [] }); }
         } catch (error) {
             console.dir(error);
