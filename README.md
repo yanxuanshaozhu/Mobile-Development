@@ -25,12 +25,13 @@ Version 5.0
 ## Elevator Pitch 
 This app is an unit converter that allows users to do conversion in six different categories(realtime exchange rate included), it also enables users to register an account, login to save and display their conversion histories. This app is based on React Native, it's server is built using Express and deployed on Heroku, it also utilizes MongoDB Atlas to store user information.
 ## Screen Shots
-<center>
- <img src="./assets/0.jpg" width="200"/><img src="./assets/1.jpg" width="200"/><img src="./assets/2.jpg" width="200"/><img src="./assets/4.jpg" width="200"/>
-</center>
-<center>
+<p align="center">
+ <img src="./assets/0.jpg" width="200"/> <img src="./assets/1.jpg" width="200"/> <img src="./assets/2.jpg" width="200"/> <img src="./assets/4.jpg" width="200"/>
+</p>
+
+<p align="center">
  <img src="./assets/5.jpg" width="200"/><img src="./assets/6.jpg" width="200"/><img src="./assets/7.jpg" width="200"/>
-</center>
+</p>
 
 ## Developer Notes
 
