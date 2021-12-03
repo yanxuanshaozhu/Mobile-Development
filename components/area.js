@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
 import { useValue } from './ValueContext';
 import Axios from "axios";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useFocusEffect } from '@react-navigation/native';
 
 const AreaScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue();
@@ -18,8 +18,15 @@ const AreaScreen = ({ navigation }) => {
     const init = 0;
     const output = num * areaMapping[itemValue2] / areaMapping[itemValue1];
 
-    useEffect(() => { getData() }
-        , [])
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            getData();
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
 
     const getData = async () => {
         try {
@@ -27,7 +34,7 @@ const AreaScreen = ({ navigation }) => {
             if (jsonValue != null) {
                 let info = JSON.parse(jsonValue);
                 setUserInfo(info);
-            }
+            } else { setUserInfo({ "registered": false }) }
         } catch (e) {
             console.dir(e);
         }
@@ -109,8 +116,8 @@ const AreaScreen = ({ navigation }) => {
     return (
         <View style={styles.containerArea}>
             <View style={{ alignItems: "center", flex: 1 }}>
-                <Text style={{ fontSize: 20}}>Unit Converter Version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
-                <Text style={{ fontSize: 20}}> Convert Area Units Here</Text>
+                <Text style={{ fontSize: 20 }}>Unit Converter Version <Text style={{ color: "red" }}>{currentValue.version}</Text></Text>
+                <Text style={{ fontSize: 20 }}> Convert Area Units Here</Text>
                 <ScreenTemplate
                     left={left}
                     right={right}

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
 import { useValue } from './ValueContext';
 import Axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 const VolumeScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue();
@@ -18,8 +19,15 @@ const VolumeScreen = ({ navigation }) => {
     const init = 0;
     const output = num * volumeMapping[itemValue2] / volumeMapping[itemValue1];
 
-    useEffect(() => { getData() }
-        , [])
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            getData();
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
 
     const getData = async () => {
         try {
@@ -27,7 +35,7 @@ const VolumeScreen = ({ navigation }) => {
             if (jsonValue != null) {
                 let info = JSON.parse(jsonValue);
                 setUserInfo(info);
-            }
+            } else { setUserInfo({ "registered": false }) }
         } catch (e) {
             console.dir(e);
         }

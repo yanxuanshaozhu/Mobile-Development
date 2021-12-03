@@ -31,8 +31,6 @@ const ProfileScreen = ({ navigation }) => {
     const weightName = { "kg": "Kilogram", "gr": "Gram", "lb": "Pound", "oz": "Ounce", "grain": "Grain" };
     const currencyName = { "USD": "United States Dollar", "CNY": "Chinese Yuan", "GBP": "Great Britain Pound", "EUR": "EURO", "CAD": "Canadian Dollar", "HKD": "Hong Kong Dollar", "INR": "Indian Rupee" }
 
-
-
     useFocusEffect(
         React.useCallback(() => {
             let isActive = true;
@@ -48,7 +46,6 @@ const ProfileScreen = ({ navigation }) => {
     );
 
     const getUserInfo = async () => {
-        console.log("getUserInfo");
         try {
             const jsonValue = await AsyncStorage.getItem("@userData");
             if (jsonValue != null) {
@@ -65,16 +62,18 @@ const ProfileScreen = ({ navigation }) => {
 
     const getUserActivity = async () => {
         try {
-            let email = userInfo.userEmail;
-            let baseURL = currentValue.serverURL;
-            Axios({
-                method: "post",
-                url: "/getUserActivity",
-                baseURL: baseURL,
-                data: { "userEmail": email },
-            }).then((response) => {
-                setUserActivity(response.data);
-            })
+            if (userInfo.userEmail != "") {
+                let email = userInfo.userEmail;
+                let baseURL = currentValue.serverURL;
+                Axios({
+                    method: "post",
+                    url: "/getUserActivity",
+                    baseURL: baseURL,
+                    data: { "userEmail": email },
+                }).then((response) => {
+                    setUserActivity(response.data);
+                })
+            } else { setUserActivity({ "area": [], "length": [], "speed": [], "volume": [], "weight": [], "currency": [] }); }
         } catch (error) {
             console.dir(error);
         }
@@ -231,7 +230,7 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const renderArea = (item) => {
-        let ls = item["item"].split(" ");
+        let ls = item.item.item.split(" ");
         return (
             <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
                 <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {areaName[ls[1]]} = {ls[3]} {areaName[ls[2]]}</Text>
@@ -239,7 +238,7 @@ const ProfileScreen = ({ navigation }) => {
         );
     }
     const renderLength = (item) => {
-        let ls = item["item"].split(" ");
+        let ls = item.item.item.split(" ");
         return (
             <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
                 <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {lengthName[ls[1]]} = {ls[3]} {lengthName[ls[2]]}</Text>
@@ -247,7 +246,7 @@ const ProfileScreen = ({ navigation }) => {
         );
     }
     const renderSpeed = (item) => {
-        let ls = item["item"].split(" ");
+        let ls = item.item.item.split(" ");
         return (
             <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
                 <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {speedName[ls[1]]} = {ls[3]} {speedName[ls[2]]}</Text>
@@ -255,7 +254,7 @@ const ProfileScreen = ({ navigation }) => {
         );
     }
     const renderVolume = (item) => {
-        let ls = item["item"].split(" ");
+        let ls = item.item.item.split(" ");
         return (
             <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
                 <Text style={{ color: "red", fontSize: 12 }}>{ls[0]} {volumeName[ls[1]]} = {ls[3]} {volumeName[ls[2]]}</Text>
@@ -263,7 +262,7 @@ const ProfileScreen = ({ navigation }) => {
         );
     }
     const renderWeight = (item) => {
-        let ls = item["item"].split(" ");
+        let ls = item.item.item.split(" ");
         return (
             <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
                 <Text style={{ color: "red", fontSize: 12 }}>{ls[0]} {weightName[ls[1]]} = {ls[3]} {weightName[ls[2]]}</Text>
@@ -271,7 +270,7 @@ const ProfileScreen = ({ navigation }) => {
         );
     }
     const renderCurrency = (item) => {
-        let ls = item["item"].split(" ");
+        let ls = item.item.item.split(" ");
         return (
             <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black", marginHorizontal: 2 }}>
                 <Text style={{ color: "red", fontSize: 12 }}> {ls[0]} {currencyName[ls[1]]} = {ls[3]} {currencyName[ls[2]]}</Text>
@@ -398,8 +397,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontWeight: "bold" }}> Area conversion history:</Text>
                 <FlatList
                     horizontal={true}
-                    data={userActivity["area"]}
+                    data={userActivity["area"].map((item, index) => ({ "item": item, "id": index }))}
                     renderItem={renderArea}
+                    keyExtractor={(item, id) => id.toString()}
                 />
             </View>
 
@@ -407,8 +407,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontWeight: "bold" }}> Length conversion history:</Text>
                 <FlatList
                     horizontal={true}
-                    data={userActivity["length"]}
+                    data={userActivity["length"].map((item, index) => ({ item, "id": index }))}
                     renderItem={renderLength}
+                    keyExtractor={(item, id) => id.toString()}
                 />
             </View>
 
@@ -416,8 +417,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontWeight: "bold" }}> Speed conversion history:</Text>
                 <FlatList
                     horizontal={true}
-                    data={userActivity["speed"]}
+                    data={userActivity["speed"].map((item, index) => ({ item, "id": index }))}
                     renderItem={renderSpeed}
+                    keyExtractor={(item, id) => id.toString()}
                 />
             </View>
 
@@ -425,8 +427,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontWeight: "bold" }}> Volume conversion history:</Text>
                 <FlatList
                     horizontal={true}
-                    data={userActivity["volume"]}
+                    data={userActivity["volume"].map((item, index) => ({ item, "id": index }))}
                     renderItem={renderVolume}
+                    keyExtractor={(item, id) => id.toString()}
                 />
             </View>
 
@@ -434,8 +437,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontWeight: "bold" }}> Weight conversion history:</Text>
                 <FlatList
                     horizontal={true}
-                    data={userActivity["weight"]}
+                    data={userActivity["weight"].map((item, index) => ({ item, "id": index }))}
                     renderItem={renderWeight}
+                    keyExtractor={(item, id) => id.toString()}
                 />
             </View>
 
@@ -443,8 +447,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontWeight: "bold" }}> Currency conversion history:</Text>
                 <FlatList
                     horizontal={true}
-                    data={userActivity["currency"]}
+                    data={userActivity["currency"].map((item, index) => ({ item, "id": index }))}
                     renderItem={renderCurrency}
+                    keyExtractor={(item, id) => id.toString()}
                 />
             </View>
 

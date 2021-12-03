@@ -181,7 +181,7 @@ const LoginScreen = ({ navigation }) => {
                     userLogin();
                 }}
             >
-                <Text style ={{color:"red", margin:5}}> Login </Text>
+                <Text style={{ color: "red", margin: 5 }}> Login </Text>
             </TouchableOpacity>
             {displayResult(result)}
         </View>

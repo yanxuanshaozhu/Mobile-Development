@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
 import { useValue } from './ValueContext';
 import Axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 const CurrencyScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue();
@@ -14,11 +15,18 @@ const CurrencyScreen = ({ navigation }) => {
     const [itemValue2, setItemValue2] = useState("USD");
     const [data, setData] = useState({});
 
-    useEffect(() => {
-        getData();
-        getRates();
-    }
-        , [])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            getData();
+            getRates();
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
+
     const init = 0;
     const output = num * data[itemValue2] / data[itemValue1];
 
@@ -31,7 +39,7 @@ const CurrencyScreen = ({ navigation }) => {
             if (jsonValue != null) {
                 let info = JSON.parse(jsonValue);
                 setUserInfo(info);
-            }
+            } else { setUserInfo({ "registered": false }) }
         } catch (e) {
             console.dir(e);
         }

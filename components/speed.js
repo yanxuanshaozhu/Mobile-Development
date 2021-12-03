@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenTemplate from './screenContainer';
 import { useValue } from './ValueContext';
 import Axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 const SpeedScreen = ({ navigation }) => {
     const { currentValue, setCurrentValue } = useValue();
@@ -17,8 +18,15 @@ const SpeedScreen = ({ navigation }) => {
     const init = 0;
     const output = num * speedMapping[itemValue2] / speedMapping[itemValue1];
 
-    useEffect(() => { getData() }
-        , [])
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+            getData();
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
 
     const getData = async () => {
         try {
@@ -26,7 +34,7 @@ const SpeedScreen = ({ navigation }) => {
             if (jsonValue != null) {
                 let info = JSON.parse(jsonValue);
                 setUserInfo(info);
-            }
+            } else { setUserInfo({ "registered": false }) }
         } catch (e) {
             console.dir(e);
         }

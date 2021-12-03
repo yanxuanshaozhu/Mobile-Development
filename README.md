@@ -21,29 +21,16 @@ All work in this repo is done solely by the owner of this repo. No other individ
 ## APP Name 
 Unit Converter
 ## Version
-Version 4.0
+Version 5.0
 ## Elevator Pitch 
-This app is a unit converter that helps users convert between different units(realtime exchange rate data included).
+This app is an unit converter that allows users to do conversion in six different categories(realtime exchange rate included), it also enables users to register an account, login to save and display their conversion histories. This app is based on React Native, it's server is built using Express and deployed on Heroku, it also utilizes MongoDB Atlas to store user information.
 ## Screen Shots
-<div style="display: flex; flex-direction:row;">
-  <div style="flex:1; margin:5px;">
-    <img src="./assets/Screen%20Shot%200.jpg"  style="width:100%">
-  </div>
-  <div style="flex:1; margin:5px;">
-    <img src="./assets/Screen%20Shot%201.jpg" style="width:100%">
-  </div>
-  <div style="flex:1; margin:5px;">
-    <img src="./assets/Screen%20Shot%202.jpg" style="width:100%">
-  </div>
-</div>
-<div style="display: flex; flex-direction:row;">
-  <div style="flex:1; margin:5px;">
-    <img src="./assets/ScreenShot%203.png"  style="width:100%">
-  </div>
-  <div style="flex:1; margin:5px;">
-    <img src="./assets/ScreenShot%204.png" style="width:100%">
-  </div>
-</div>
+<center>
+ <img src="./assets/0.jpg" width="200"/><img src="./assets/1.jpg" width="200"/><img src="./assets/2.jpg" width="200"/><img src="./assets/4.jpg" width="200"/>
+</center>
+<center>
+ <img src="./assets/5.jpg" width="200"/><img src="./assets/6.jpg" width="200"/><img src="./assets/7.jpg" width="200"/>
+</center>
 
 ## Developer Notes
 
@@ -57,10 +44,10 @@ This app is a unit converter that helps users convert between different units(re
     <ul>
         <li>React Native</li>
         <li>JavaScript</li>
-        <li>Picker</li>
         <li>AsyncStorage</li>
         <li>Axios</li>
         <li>Express</li>
+        <li>MongoDB</li>
     </ul>
 </figure>
 
@@ -68,6 +55,6 @@ This app is a unit converter that helps users convert between different units(re
     <figcaption style="font-weight:bold">To be done</figcaption>
 </figure>
 
-- [X] Add database connection: mongoDB
-- [ ] Make the user profile page more user friendly
-- [X] Make an Express server and deploy it to heroku, server link: https://cpa-server.herokuapp.com/, server code: https://github.com/yanxuanshaozhu/CPAServer
+- [X] Add database connection: MongoDB
+- [X] Make the user profile page more user friendly
+- [X] Make an Express server and deploy it to Heroku, server project link: https://github.com/yanxuanshaozhu/CPAServer
