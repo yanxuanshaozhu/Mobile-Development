@@ -30,7 +30,7 @@ This app is an unit converter that allows users to do conversion in six differen
 </p>
 
 <p align="center">
- <img src="./assets/5.jpg" width="200"/><img src="./assets/6.jpg" width="200"/><img src="./assets/7.jpg" width="200"/>
+ <img src="./assets/5.jpg" width="200"/> <img src="./assets/6.jpg" width="200"/> <img src="./assets/7.jpg" width="200"/>
 </p>
 
 ## Developer Notes
